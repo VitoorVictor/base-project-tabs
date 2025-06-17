@@ -1,26 +1,250 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  /* Novas variáveis de cor */
+  --color-background-alt: var(--background-alt);
+  --color-background-overlay: var(--background-overlay);
+  --color-background-info: var(--background-info);
+  --color-background-header: var(--background-header);
+  /* Novas variáveis de fonte */
+  --font-display: var(--font-display);
+  --font-system: var(--font-system);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  --background: oklch(100% 0 0); /* Branco puro */
+  --foreground: oklch(20% 0 0); /* Quase preto para bom contraste */
+
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(20% 0 0);
+
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(20% 0 0);
+
+  --primary: oklch(50.3% 0.182 278.01); /* cor primária */
+  --primary-foreground: oklch(
+    98.5% 0 0
+  ); /* Quase branco para alto contraste com primary */
+
+  --secondary: oklch(
+    95% 0 0
+  ); /* Um cinza claro sutil para complementar o background */
+  --secondary-foreground: oklch(
+    30% 0 0
+  ); /* Um cinza escuro para contraste com secondary */
+
+  --muted: oklch(
+    97% 0 0
+  ); /* Um cinza ainda mais claro, para textos de suporte */
+  --muted-foreground: oklch(
+    50% 0 0
+  ); /* Um cinza médio para contraste com muted */
+
+  --accent: oklch(
+    90% 0 0
+  ); /* Um cinza um pouco mais escuro que secondary para elementos de foco */
+  --accent-foreground: oklch(
+    25% 0 0
+  ); /* Quase preto para contraste com accent */
+
+  --destructive: oklch(
+    57.7% 0.245 27.325
+  ); /* Vermelho padrão para ações destrutivas */
+  --border: oklch(90% 0 0); /* Um cinza claro para bordas */
+  --input: oklch(92% 0 0); /* Um cinza para inputs */
+  --ring: oklch(50.3% 0.182 278.01); /* Usa a cor primary para o ring */
+
+  /* Novas variáveis de cor com nomes semânticos */
+  --background-alt: oklch(
+    0.985 0.001 0
+  ); /* Um fundo alternativo, ligeiramente diferente do principal */
+  --background-overlay: oklch(
+    0.963 0.001 0
+  ); /* Fundo para modais, tooltips grandes, etc. */
+  --background-info: oklch(
+    0.611 0.069 264
+  ); /* Fundo para mensagens de informação/dicas (azul) */
+  --background-header: oklch(
+    0.52 0.12 0.13
+  ); /* Fundo para cabeçalhos de tabela ou seções */
+
+  /* Cores para gráficos, mantidas como estavam para diversidade */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  /* Cores da sidebar, seguindo a mesma lógica das cores gerais */
+  --sidebar: oklch(98.5% 0 0);
+  --sidebar-foreground: oklch(14.5% 0 0);
+  --sidebar-primary: oklch(50.3% 0.182 278.01); /* Usa a cor primary */
+  --sidebar-primary-foreground: oklch(98.5% 0 0);
+  --sidebar-accent: oklch(90% 0 0);
+  --sidebar-accent-foreground: oklch(25% 0 0);
+  --sidebar-border: oklch(90% 0 0);
+  --sidebar-ring: oklch(50.3% 0.182 278.01);
+
+  /* Variáveis de fonte com nomes semânticos */
+  --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; /* Se for uma fonte específica para displays */
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; /* Fonte do sistema */
+}
+
+.dark {
+  --background: oklch(14.5% 0 0); /* Quase preto para background */
+  --foreground: oklch(98.5% 0 0); /* Quase branco para texto */
+
+  --card: oklch(20% 0 0); /* Um cinza mais escuro para cards */
+  --card-foreground: oklch(98.5% 0 0);
+
+  --popover: oklch(20% 0 0);
+  --popover-foreground: oklch(98.5% 0 0);
+
+  --primary: oklch(
+    55.3% 0.182 278.01
+  ); /* Levemente mais clara que a primary light para contraste em fundo escuro */
+  --primary-foreground: oklch(
+    10% 0 0
+  ); /* Quase preto para contraste com primary dark */
+
+  --secondary: oklch(
+    25% 0 0
+  ); /* Um cinza médio-escuro para complementar o background dark */
+  --secondary-foreground: oklch(
+    90% 0 0
+  ); /* Um cinza claro para contraste com secondary dark */
+
+  --muted: oklch(20% 0 0); /* Um cinza escuro para textos de suporte */
+  --muted-foreground: oklch(
+    70% 0 0
+  ); /* Um cinza médio para contraste com muted dark */
+
+  --accent: oklch(
+    30% 0 0
+  ); /* Um cinza um pouco mais claro que secondary dark para elementos de foco */
+  --accent-foreground: oklch(
+    95% 0 0
+  ); /* Quase branco para contraste com accent dark */
+
+  --destructive: oklch(
+    70.4% 0.191 22.216
+  ); /* Vermelho padrão para ações destrutivas no dark mode */
+  --border: oklch(10% 0 0 / 20%); /* Borda escura com transparência */
+  --input: oklch(10% 0 0 / 30%); /* Input escuro com transparência */
+  --ring: oklch(55.3% 0.182 278.01); /* Usa a cor primary-dark para o ring */
+
+  /* Novas variáveis de cor com nomes semânticos para o modo dark */
+  --background-alt: oklch(
+    18% 0 0
+  ); /* Mais escuro que o background, para contraste */
+  --background-overlay: oklch(
+    16% 0 0
+  ); /* Fundo para modais, um pouco mais escuro para destaque */
+  --background-info: oklch(
+    0.4 0.08 264
+  ); /* Um azul mais escuro para o modo dark */
+  --background-header: oklch(
+    0.3 0.1 0.13
+  ); /* Um cinza mais escuro para cabeçalhos */
+
+  /* Cores para gráficos, mantidas como estavam para diversidade */
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  /* Cores da sidebar, seguindo a mesma lógica das cores gerais no dark mode */
+  --sidebar: oklch(20% 0 0);
+  --sidebar-foreground: oklch(98.5% 0 0);
+  --sidebar-primary: oklch(55.3% 0.182 278.01);
+  --sidebar-primary-foreground: oklch(98.5% 0 0);
+  --sidebar-accent: oklch(30% 0 0);
+  --sidebar-accent-foreground: oklch(95% 0 0);
+  --sidebar-border: oklch(10% 0 0 / 20%);
+  --sidebar-ring: oklch(55.3% 0.182 278.01);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
+  body {
+    @apply bg-background text-foreground;
+    @apply antialiased;
+    font-family: var(--font-sans);
+    font-weight: 400;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px; /* Largura da scrollbar */
+    height: 6px; /* Altura da scrollbar para scroll horizontal */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    /* Usando background ou background-alt para o trilho. background-alt é um bom tom suave. */
+    background: var(--background-alt); /* Cor do trilho */
+    border-radius: 90%; /* Bordas arredondadas (um valor alto como 90% ou 999px faz um pill) */
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-right: 5px; /* Adicionado para dar um pequeno respiro à direita se houver */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    /* Usando primary ou secondary para o "polegar". primary-foreground pode ser uma boa cor escura. */
+    background: var(--primary); /* Cor do "polegar" */
+    border-radius: 20px; /* Bordas arredondadas para o polegar */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    /* Levemente mais escuro ou mais claro que o primary, ou primary-foreground */
+    background: var(--primary-foreground); /* Cor ao passar o mouse */
+  }
 }
