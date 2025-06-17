@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { ComponentType } from "react";
-import { DashboardContent } from "@/components/Contents/Dashboard/dashboard-content";
+import { DashboardContent } from "@/components/Pages/Dashboard/dashboard-pages";
+import { House, LucideIcon } from "lucide-react";
 
 type Tab = {
+  icon?: LucideIcon;
   key: string;
   title: string;
   component: ComponentType;
@@ -20,6 +22,7 @@ type TabStore = {
 export const useTabStore = create<TabStore>((set) => ({
   tabs: [
     {
+      icon: House,
       key: "dashboard",
       title: "Dashboard",
       component: DashboardContent,

@@ -7,15 +7,15 @@ export const columns: ColumnConfig<ICentroCusto>[] = [
     key: "descricao",
     label: "Descrição",
     sorted: true,
-    className: "w-[85%]",
-    headerClassName: "w-[85%]",
+    className: "w-[60%] lg:w-[85%]",
+    headerClassName: "w-[60%] lg:w-[85%]",
   },
   {
     key: "ativo",
     label: "Ativo",
     sorted: true,
-    className: "w-[10%]",
-    headerClassName: "w-[10%]",
+    className: "w-[30%] lg:w-[10%]",
+    headerClassName: "w-[30%] lg:w-[10%]",
     render: (value: boolean) => (
       <div className="flex items-center gap-2">
         {value ? (

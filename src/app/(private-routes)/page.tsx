@@ -1,10 +1,10 @@
-import { TabContentRender } from "@/components/TabContentRender";
+import { TabPagesRender } from "@/components/TabPagesRender";
 import { TabManager } from "@/components/TabManager";
 
 export default function HomePage() {
   return (
     <TabManager>
-      <TabContentRender />
+      <TabPagesRender />
     </TabManager>
   );
 }

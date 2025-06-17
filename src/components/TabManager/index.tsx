@@ -13,22 +13,24 @@ export function TabManager({ children }: { children: ReactNode }) {
       <Tabs
         value={activeKey}
         onValueChange={setActiveKey}
-        className="flex-1 gap-0"
+        className="flex-1 gap-0 overflow-hidden"
       >
         {/* Navegação das abas */}
-        <ScrollArea className="border-b">
-          <TabsList className="text-foreground h-auto gap-2 rounded-none bg-transparent">
+        <ScrollArea className="border-b-2 border-primary bg-background-overlay">
+          <TabsList className="mx-1 mt-2 text-foreground rounded-none before:bg-border bg-transparent relative h-8 p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px">
             {tabs.map((tab) => (
               <div key={tab.key} className="relative">
                 <TabsTrigger
                   value={tab.key}
-                  className="h-8 hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative pr-8 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  className="px-4 bg-background overflow-hidden rounded-b-none border-slate-300 border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:bg-primary data-[state=active]:text-background text-xs"
                 >
-                  {/* {tab.icon && (
-                    <span className="-ms-0.5 me-1.5 opacity-60" aria-hidden="true">
-                      {tab.icon}
-                    </span>
-                  )} */}
+                  {tab.icon && (
+                    <tab.icon
+                      className="-ms-0.5 me-1.5"
+                      size={16}
+                      aria-hidden="true"
+                    />
+                  )}
                   {tab.title}
                   {/* {tab.badge && (
                     <Badge className="bg-primary/15 ms-1.5 min-w-5 px-1" variant="secondary">
@@ -56,7 +58,7 @@ export function TabManager({ children }: { children: ReactNode }) {
         </ScrollArea>
 
         {/* Conteúdo das abas */}
-        <div className="flex-1 bg-background-overlay p-4">
+        <div className="flex-1 h-full max-h-full custom-scrollbar overflow-y-auto">
           {tabs.map((tab) => (
             <TabsContent key={tab.key} value={tab.key} className="h-full">
               {children}

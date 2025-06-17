@@ -1,7 +1,7 @@
 "use client";
 import { useTabStore } from "@/store/tabStore";
 
-export function TabContentRender() {
+export function TabPagesRender() {
   const { activeKey, tabs } = useTabStore();
 
   if (!activeKey) return <div>Nenhuma aba ativa</div>;

@@ -71,6 +71,9 @@ type CustomTableProps<T> = {
   minWidth?: MinWidthProp;
   actionsReference?: string;
   dropdowns?: DropdownsConfig<T>[];
+  order: string;
+  type: string;
+  onOrderChange: (column: string) => void;
 };
 
 export default function CustomTable<T>({
@@ -79,6 +82,9 @@ export default function CustomTable<T>({
   minWidth = "md",
   actionsReference = "id",
   dropdowns,
+  order,
+  type,
+  onOrderChange,
 }: CustomTableProps<T>) {
   //   const { nvp } = usePermission();
   const router = useRouter();
@@ -88,17 +94,6 @@ export default function CustomTable<T>({
   const pathSegments = pathname.split("/").filter(Boolean);
 
   const currentParams = new URLSearchParams(searchParams.toString());
-
-  const order = searchParams.get("order") ?? "id";
-  const type = searchParams.get("type") ?? "asc";
-
-  const handleOrderChange = (newOrder: string) => {
-    const newType = type === "asc" ? "desc" : "asc";
-    currentParams.set("order", newOrder);
-    currentParams.set("type", newType);
-    currentParams.set("page", "1");
-    router.push(`?${currentParams.toString()}`);
-  };
 
   const onClickActions = (action: string, id: string) => {
     if (action === "update") {
@@ -145,7 +140,7 @@ export default function CustomTable<T>({
             : undefined
         }
       >
-        <TableHeader className="bg-background-sidebar text-accent-foreground rounded-lg">
+        <TableHeader className="bg-background-alt text-accent-foreground rounded-lg">
           <TableRow>
             {columns.map((col) => {
               const colKey = String(col.key);
@@ -163,7 +158,7 @@ export default function CustomTable<T>({
                     <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
-                        onClick={() => handleOrderChange(colKey)}
+                        onClick={() => onOrderChange(colKey)}
                         size="sm"
                         className={clsx(
                           "p-0 hover:bg-transparent",
@@ -196,7 +191,7 @@ export default function CustomTable<T>({
               return (
                 <TableRow
                   key={index}
-                  className={index % 2 ? "bg-background-sidebar" : "bg-white"}
+                  className={index % 2 ? "bg-background-alt" : "bg-white"}
                 >
                   {columns.map((col) => (
                     <TableCell

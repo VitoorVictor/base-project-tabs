@@ -37,6 +37,7 @@ export function SideMain({ items }: { items: SidebarItem[] }) {
     setOpen(false);
     console.log(item.component);
     openTab({
+      icon: item.icon,
       key: item.key,
       title: item.title,
       component: item.component,

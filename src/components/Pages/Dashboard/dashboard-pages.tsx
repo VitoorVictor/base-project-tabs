@@ -2,7 +2,7 @@ import { Header } from "../Header";
 
 export function DashboardContent() {
   return (
-    <div className="flex-1 h-full flex flex-col gap-4 p-4 bg-background rounded-md border custom-scrollbar overflow-y-auto">
+    <div className="space-y-4 bg-background p-4">
       <Header title="Dashboard" subtitle="Gerencie os indicadores do sistema" />
       <div className="flex flex-1 h-full flex-col gap-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">

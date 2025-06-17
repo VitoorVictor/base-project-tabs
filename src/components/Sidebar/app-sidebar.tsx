@@ -21,8 +21,8 @@ import {
   UserRoundPlus,
   ShieldPlus,
 } from "lucide-react";
-import { DashboardContent } from "../Contents/Dashboard/dashboard-content";
-import { CentroCustosContent } from "../Contents/CentroCusto/centro-custo-content";
+import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
+import { CentroCustosContent } from "../Pages/CentroCusto/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -51,6 +51,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               permission: "recpag_documento_tipos_findAll",
             },
             {
+              icon: HandCoins,
               title: "Centros de Custos",
               key: "centro-custos",
               permission: "centro_custos_findAll",
