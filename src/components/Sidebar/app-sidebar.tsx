@@ -24,6 +24,7 @@ import {
 import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
 import { CentroCustosContent } from "../Pages/CentroCusto/pages";
 import { MarcaPage } from "../Pages/Marca/pages";
+import { GrupoPage } from "../Pages/Grupos/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -136,9 +137,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           icon: Package,
           items: [
             {
+              icon: Package,
               title: "Grupos",
               key: "grupos",
               permission: "grupos_findAll",
+              component: GrupoPage,
             },
             {
               icon: Package,
