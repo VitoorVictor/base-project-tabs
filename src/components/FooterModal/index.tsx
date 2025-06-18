@@ -9,16 +9,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { Loader2, LoaderCircle } from "lucide-react";
 
 interface FooterModalProps {
   onClose: () => void;
   labelCancel?: string;
   labelConfirm?: string;
+  labelLoading?: string;
+  isLoading?: boolean;
 }
 export function FooterModal({
   onClose,
   labelCancel,
   labelConfirm,
+  labelLoading,
+  isLoading,
 }: FooterModalProps) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
@@ -56,7 +61,17 @@ export function FooterModal({
           </DialogContent>
         </Dialog>
 
-        <Button type="submit">{labelConfirm ?? "Salvar"}</Button>
+        {/* <Button type="submit">{labelConfirm ?? "Salvar"}</Button> */}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              {labelLoading ?? "salvando..."}
+            </>
+          ) : (
+            labelConfirm ?? "Salvar"
+          )}
+        </Button>
       </div>
     </>
   );

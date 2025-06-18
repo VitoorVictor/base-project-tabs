@@ -19,12 +19,31 @@ import {
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { handleApiError } from "@/utils/handleApiError";
 import { toast } from "react-toastify";
+import { useTabStore } from "@/store/tabStore";
+import { useFilterStore } from "@/store/filterStore";
 
 export function CentroCustosContent() {
-  const [order, setOrder] = useState("descricao");
-  const [type, setType] = useState<"asc" | "desc">("asc");
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const { activeKey } = useTabStore();
+  const { filters, setFilters } = useFilterStore();
+
+  const [order, setOrder] = useState(
+    filters[activeKey] && filters[activeKey].order
+      ? filters[activeKey].order
+      : "descricao"
+  );
+  const [type, setType] = useState<"asc" | "desc">(
+    filters[activeKey] && filters[activeKey].type
+      ? filters[activeKey].type
+      : "asc"
+  );
+  const [page, setPage] = useState(
+    filters[activeKey] && filters[activeKey].page ? filters[activeKey].page : 1
+  );
+  const [search, setSearch] = useState(
+    filters[activeKey] && filters[activeKey].search
+      ? filters[activeKey].search
+      : ""
+  );
 
   const [id, setId] = useState<null | string>(null);
   const [showModal, setShowModal] = useState(false);
@@ -80,28 +99,32 @@ export function CentroCustosContent() {
 
   const changeOrder = (column: string) => {
     if (column === order) {
-      setType(type === "asc" ? "desc" : "asc");
+      const newType = type === "asc" ? "desc" : "asc";
+      setType(newType);
+      setFilters(activeKey, { type: newType });
     } else {
-      setOrder(column); 
+      setOrder(column);
       setType("asc");
+      setFilters(activeKey, { order: column, type: "asc" });
     }
   };
 
-  const ClickRow = (row: ICentroCusto) => {
-    setShowModal(true);
-    setId(row.secureId ? row.secureId : null);
+  const searching = (search: string) => {
+    setSearch(search);
+    setPage(1);
+    setFilters(activeKey, { search, page: 1 });
   };
 
   return (
     <>
-      <div className="space-y-2 bg-background p-4">
+      <div className="space-y-2 bg-background p-4 h-full flex flex-col">
         <Header title="Centros de Custos" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
               placeholder="Buscar por descrição..."
               search={search}
-              onSubmit={setSearch}
+              onSubmit={searching}
             />
           </div>
           {havePermission("centro_custos_create") && (
@@ -122,7 +145,7 @@ export function CentroCustosContent() {
             </>
           )}
         </div>
-        <div className="flex-1">
+        <div className="h-full">
           {isLoading && !data && (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -138,7 +161,6 @@ export function CentroCustosContent() {
               order={order}
               type={type}
               onOrderChange={changeOrder}
-              onRowClick={ClickRow}
               actions={actions}
             />
           )}

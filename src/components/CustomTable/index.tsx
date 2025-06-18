@@ -83,7 +83,7 @@ type CustomTableProps<T> = {
   order: string;
   type: string;
   onOrderChange: (column: string) => void;
-  onRowClick: (row: T) => void;
+  onRowClick?: (row: T) => void;
   actions?: TableActions<T>;
 };
 
@@ -208,10 +208,10 @@ export default function CustomTable<T>({
                 <TableRow
                   key={index}
                   className={index % 2 ? "bg-background-alt" : "bg-white"}
-                  onClick={() => onRowClick(row)}
                 >
                   {columns.map((col) => (
                     <TableCell
+                      onClick={() => (onRowClick ? onRowClick(row) : undefined)}
                       key={String(col.key)}
                       className={`py-0.5 border-r border-gray-200 truncate overflow-hidden whitespace-nowrap text-label ${
                         col.className ?? ""

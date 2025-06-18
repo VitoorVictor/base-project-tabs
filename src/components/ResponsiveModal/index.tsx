@@ -75,6 +75,7 @@ export function ResponsiveModal({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
+        showCloseButton={false}
         className="sm:max-w-[425px]"
         onInteractOutside={(e) => e.preventDefault()}
       >

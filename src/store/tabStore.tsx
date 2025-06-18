@@ -36,9 +36,12 @@ export const useTabStore = create<TabStore>((set) => ({
     })),
   closeTab: (key) =>
     set((s) => {
+      const indexForClose = s.tabs.findIndex((tab) => tab.key === key);
+      const beforeActiveKeyTab =
+        s.tabs[indexForClose > 0 ? indexForClose - 1 : 0];
       const tabs = s.tabs.filter((t) => t.key !== key);
       const activeKey =
-        s.activeKey === key ? tabs.pop()?.key || "" : s.activeKey;
+        s.activeKey === key ? beforeActiveKeyTab?.key || "" : s.activeKey;
       return { tabs, activeKey };
     }),
   setActiveKey: (key) => set({ activeKey: key }),

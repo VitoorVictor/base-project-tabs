@@ -19,7 +19,7 @@ export const columns: ColumnConfig<ICentroCusto>[] = [
   {
     key: "ativo",
     label: "Ativo",
-    sorted: true,
+    sorted: false,
     className: "w-[30%] lg:w-[10%]",
     headerClassName: "w-[30%] lg:w-[10%]",
     render: (value: boolean) => (

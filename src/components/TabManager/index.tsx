@@ -4,6 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import type { ReactNode } from "react";
 import { useTabStore } from "@/store/tabStore";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 export function TabManager({ children }: { children: ReactNode }) {
   const { tabs, activeKey, setActiveKey, closeTab } = useTabStore();
@@ -22,7 +24,8 @@ export function TabManager({ children }: { children: ReactNode }) {
               <div key={tab.key} className="relative">
                 <TabsTrigger
                   value={tab.key}
-                  className="px-4 bg-background overflow-hidden rounded-b-none border-slate-300 border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:bg-primary data-[state=active]:text-background text-xs"
+                  className={`pl-4 bg-background overflow-hidden rounded-b-none border-slate-300 border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:bg-primary data-[state=active]:text-background text-xs
+                      ${tab.key === "dashboard" ? "pr-4" : "pr-8"}`}
                 >
                   {tab.icon && (
                     <tab.icon
@@ -38,19 +41,19 @@ export function TabManager({ children }: { children: ReactNode }) {
                     </Badge>
                   )} */}
                 </TabsTrigger>
-                {/* {true && (
+                {tab.key !== "dashboard" && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-4 w-4 p-0 opacity-60 hover:opacity-100 hover:bg-destructive hover:text-destructive-foreground"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 h-5 w-4 p-0 hover:bg-destructive hover:text-white text-white rounded-full cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       closeTab(tab.key);
                     }}
                   >
-                    <X className="h-3 w-3" />
+                    <X />
                   </Button>
-                )} */}
+                )}
               </div>
             ))}
           </TabsList>

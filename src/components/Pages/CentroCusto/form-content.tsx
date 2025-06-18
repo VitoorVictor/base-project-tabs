@@ -103,7 +103,7 @@ export function FormContent({
             </Button>
           </div>
         ) : (
-          <FooterModal onClose={onClose!} />
+          <FooterModal onClose={onClose!} isLoading={loading} />
         )}
       </form>
     </FormProvider>
