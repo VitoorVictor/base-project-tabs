@@ -135,6 +135,9 @@
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; /* Se for uma fonte específica para displays */
   --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; /* Fonte do sistema */
+
+  /* Variáveis de estilziação de radius */
+  --radius: 0.5rem;
 }
 
 .dark {

@@ -31,7 +31,9 @@ export function CustomPagesPagination({
                   setPage(currentPage - 1);
                 }}
                 className={
-                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  currentPage === 1
+                    ? "pointer-events-none opacity-50 h-8"
+                    : "h-8"
                 }
               />
             </PaginationItem>
@@ -54,8 +56,8 @@ export function CustomPagesPagination({
                       }}
                       className={
                         currentPage === page
-                          ? "bg-primary text-white hover:bg-primary/80 hover:text-white"
-                          : ""
+                          ? "bg-primary text-white hover:bg-primary/80 hover:text-white h-8 w-8"
+                          : "h-8 w-8"
                       }
                       isActive={currentPage === page}
                     >
@@ -66,7 +68,7 @@ export function CustomPagesPagination({
               } else if (page === currentPage - 3 || page === currentPage + 3) {
                 return (
                   <PaginationItem key={page}>
-                    <PaginationEllipsis />
+                    <PaginationEllipsis className="h-8 w-8" />
                   </PaginationItem>
                 );
               }
@@ -81,8 +83,8 @@ export function CustomPagesPagination({
                 }}
                 className={
                   currentPage === totalPages
-                    ? "pointer-events-none opacity-50"
-                    : ""
+                    ? "pointer-events-none opacity-50 h-8"
+                    : "h-8"
                 }
               />
             </PaginationItem>
