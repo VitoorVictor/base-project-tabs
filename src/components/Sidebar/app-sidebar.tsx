@@ -22,7 +22,8 @@ import {
   ShieldPlus,
 } from "lucide-react";
 import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
-import { CentroCustosContent } from "../Pages/CentroCusto/pages";
+import { CentroCustosPage } from "../Pages/CentroCusto/pages";
+import { PessoaGruposPage } from "../Pages/GrupoPessoas/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -49,38 +50,38 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Tipo de Rec./Pag.",
               key: "recpag-documento-tipos",
               permission: "recpag_documento_tipos_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               icon: HandCoins,
               title: "Centros de Custos",
               key: "centro-custos",
               permission: "centro_custos_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Classificações de Rec./Pag.",
               key: "recpag-classificacoes",
               permission: "recpag_classificacoes_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Contas Correntes/Caixa",
               key: "contas",
               permission: "contas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Formas de Pagamentos",
               key: "formas-pagamentos",
               permission: "contas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Plano de Contas",
               key: "plano-contas",
               permission: "plano_contas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
           ],
         },
@@ -92,31 +93,31 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Clientes e Fornecedores",
               key: "pessoas",
               permission: "pessoas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Estados Civis",
               key: "estado-civis",
               permission: "estado_civis_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Grupos de pessoas",
               key: "pessoa-grupos",
               permission: "pessoa_grupos_findAll",
-              component: CentroCustosContent,
+              component: PessoaGruposPage,
             },
             {
               title: "Origens",
               key: "pessoa-origens",
               permission: "pessoa_origens_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Situações",
               key: "pessoa-situacoes",
               permission: "pessoa_situacoes_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Tipos de Contatos",
