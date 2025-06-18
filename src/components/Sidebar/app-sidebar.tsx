@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
 import { CentroCustosContent } from "../Pages/CentroCusto/pages";
+import { MarcaPage } from "../Pages/Marca/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -140,9 +141,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               permission: "grupos_findAll",
             },
             {
+              icon: Package,
               title: "Marcas",
               key: "marcas",
               permission: "marcas_findAll",
+              component: MarcaPage,
             },
           ],
         },

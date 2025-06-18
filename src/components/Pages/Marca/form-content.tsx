@@ -7,15 +7,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormSchema } from "./schema";
 import { CustomSwitch } from "@/components/CustomInputs/custom-switch";
 import { FooterModal } from "@/components/FooterModal";
-import {
-  useCentroCusto,
-  useCreateCentroCusto,
-  useUpdateCentroCusto,
-} from "@/hooks/tanstack/useCentroCusto";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { handleApiError } from "@/utils/handleApiError";
 import { Button } from "@/components/ui/button";
+import {
+  useCreateMarca,
+  useMarca,
+  useUpdateMarca,
+} from "@/hooks/tanstack/useMarca";
 
 interface FormContentProps {
   // onSubmit?: () => void;
@@ -31,15 +31,14 @@ export function FormContent({
 }: FormContentProps) {
   const isUpdate = Boolean(id);
   const [loading, setLoading] = useState(false);
-  const { data, isLoading, isError } = useCentroCusto(id!, isUpdate);
-  const createCentroCusto = useCreateCentroCusto();
-  const updateCentroCusto = useUpdateCentroCusto();
+  const { data, isLoading, isError } = useMarca(id!, isUpdate);
+  const createMarca = useCreateMarca();
+  const updateMarca = useUpdateMarca();
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       descricao: "",
-      ativo: true,
     },
   });
   const { handleSubmit, reset } = form;
@@ -54,20 +53,19 @@ export function FormContent({
     setLoading(true);
     try {
       const res = isUpdate
-        ? await updateCentroCusto.mutateAsync({ id: id!, data: values })
-        : await createCentroCusto.mutateAsync(values);
+        ? await updateMarca.mutateAsync({ id: id!, data: values })
+        : await createMarca.mutateAsync(values);
       if (res && res.error === "") {
         toast.success(
           res.message ||
-            `Sucesso ao ${isUpdate ? "alterar" : "cadastrar"} centro de custo`
+            `Sucesso ao ${isUpdate ? "alterar" : "cadastrar"} marca`
         );
         onClose();
       }
     } catch (e) {
       const { message } = handleApiError(e);
       toast.error(
-        message ||
-          `Erro ao ${isUpdate ? "alterar" : "cadastrar"} centro de custo`
+        message || `Erro ao ${isUpdate ? "alterar" : "cadastrar"} marca`
       );
     } finally {
       setLoading(false);
@@ -77,24 +75,13 @@ export function FormContent({
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmitForm)} className="grid gap-4 py-4">
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="Descrição"
-              name="descricao"
-              className="h-8"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <CustomSwitch
-            label={"Está Ativo?"}
-            name="ativo"
-            className="mx-auto mt-2"
-            loading={isLoading}
-            disabled={isDetails}
-          />
-        </div>
+        <CustomInput
+          label="Descrição"
+          name="descricao"
+          className="h-8"
+          loading={isLoading}
+          disabled={isDetails}
+        />
         {isDetails ? (
           <div className="flex gap-2 justify-end mt-4">
             <Button type="button" variant="outline" onClick={onClose}>

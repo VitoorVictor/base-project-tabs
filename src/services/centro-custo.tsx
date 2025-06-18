@@ -1,7 +1,5 @@
-// import api from "./api";
 import { IFilterQry, IResponse, IResponseFetch } from "@/interfaces/comum";
 import { ICentroCusto } from "@/interfaces/centro-custo";
-import axios from "axios";
 import { api } from "./api";
 
 export async function fetchCentroCustoAll(

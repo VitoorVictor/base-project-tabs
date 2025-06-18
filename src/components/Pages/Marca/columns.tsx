@@ -1,0 +1,41 @@
+import { ColumnConfig } from "@/components/CustomTable";
+import { ICentroCusto } from "@/interfaces/centro-custo";
+import { IMarca } from "@/interfaces/marca";
+import {
+  CheckCircle2,
+  ClipboardList,
+  Pencil,
+  Trash2,
+  XCircle,
+} from "lucide-react";
+
+export const columns: ColumnConfig<IMarca>[] = [
+  {
+    key: "descricao",
+    label: "Descrição",
+    sorted: true,
+    className: "w-[95%]",
+    headerClassName: "w-[95%]",
+  },
+];
+
+export const dropdowns = [
+  {
+    name: "details",
+    label: "Detalhes",
+    icon: <ClipboardList />,
+    permission: "findOne",
+  },
+  {
+    name: "update",
+    label: "Alterar",
+    icon: <Pencil />,
+    permission: "update",
+  },
+  {
+    name: "delete",
+    label: "Excluír",
+    icon: <Trash2 />,
+    permission: "delete",
+  },
+];

@@ -1,4 +1,3 @@
-// hooks/useCentroCusto.ts
 import {
   fetchCentroCustoAll,
   fetchCentroCustoOne,
@@ -7,7 +6,7 @@ import {
   deleteCentroCusto,
 } from "@/services/centro-custo";
 import { ICentroCusto } from "@/interfaces/centro-custo";
-import { IFilterQry, IResponse, IResponseFetch } from "@/interfaces/comum";
+import { IFilterQry, IResponse } from "@/interfaces/comum";
 import {
   useQuery,
   useMutation,
