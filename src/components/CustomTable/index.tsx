@@ -70,7 +70,7 @@ export interface TableActions<T> {
   onUpdate?: (id: string, row: T) => void;
   onDelete?: (id: string, row: T) => void;
   onDetails?: (id: string, row: T) => void;
-  onAnexo?: (id: string, row: T) => void;
+  onAttachment?: (id: string, row: T) => void;
   onCustomAction?: (actionName: string, id: string, row: T) => void;
 }
 
@@ -99,13 +99,6 @@ export default function CustomTable<T>({
   onRowClick,
   actions,
 }: CustomTableProps<T>) {
-  // const { nvp } = usePermission();
-  // const router = useRouter();
-  // const pathname = usePathname();
-  // const searchParams = useSearchParams();
-  // const pathSegments = pathname.split("/").filter(Boolean);
-  // const currentParams = new URLSearchParams(searchParams.toString());
-
   const handleAction = (actionName: string, row: T) => {
     const id = String((row as Record<string, any>)[actionsReference]);
 
@@ -126,17 +119,13 @@ export default function CustomTable<T>({
         actions?.onDetails?.(id, row);
         break;
       case "anexo":
-        actions?.onAnexo?.(id, row);
+        actions?.onAttachment?.(id, row);
         break;
       default:
         actions?.onCustomAction?.(actionName, id, row);
         break;
     }
   };
-
-  //   const havePermission = (permissionName: string): boolean => {
-  //     return nvp.some((item) => item.nome === permissionName);
-  //   };
 
   return (
     <div

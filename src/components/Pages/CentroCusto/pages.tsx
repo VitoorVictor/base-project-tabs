@@ -21,9 +21,13 @@ import { handleApiError } from "@/utils/handleApiError";
 import { toast } from "react-toastify";
 import { useTabStore } from "@/store/tabStore";
 import { useFilterStore } from "@/store/filterStore";
+import { usePermissionStore } from "@/store/permissionStore";
+import { CustomError } from "@/components/CustomError";
+import { messageToastHelper } from "@/helpers/messageToastHelper";
 
 export function CentroCustosContent() {
   const { activeKey } = useTabStore();
+  const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
 
   const [order, setOrder] = useState(
@@ -51,20 +55,20 @@ export function CentroCustosContent() {
   const [showDetails, setShowDetails] = useState(false);
 
   const isCreate = !id;
-  const isUpdate = !!id;
 
   const deleteCentroCusto = useDeleteCentroCusto();
-  const { data, isLoading, isError } = useCentroCustos({
+  const {
+    data,
+    isLoading,
+    isError,
+    error: e,
+    refetch,
+  } = useCentroCustos({
     order,
     type,
     page,
     search,
   });
-
-  // Simulação de permissões - substitua pela sua lógica
-  const havePermission = (permissionName: string): boolean => {
-    return true; // Simular que tem todas as permissões
-  };
 
   const deleteItem = async (password: string) => {
     try {
@@ -82,16 +86,44 @@ export function CentroCustosContent() {
     }
   };
 
+  const addItem = () => {
+    if (!hasPermission("centro_custos_create")) {
+      toast.warning(
+        messageToastHelper.accessDenied("o cadastro de centro de custo")
+      );
+      return;
+    }
+    setShowModal(true);
+  };
+
   const actions: TableActions<ICentroCusto> = {
     onUpdate: (id) => {
+      if (!hasPermission("centro_custos_update")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a alteração de centro de custo")
+        );
+        return;
+      }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
+      if (!hasPermission("centro_custos_delete")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a exclusão de centro de custo")
+        );
+        return;
+      }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
+      if (!hasPermission("centro_custos_findOne")) {
+        toast.warning(
+          messageToastHelper.accessDenied("o detalhes de centro de custo")
+        );
+        return;
+      }
       setShowDetails(true);
       setId(id);
     },
@@ -109,11 +141,25 @@ export function CentroCustosContent() {
     }
   };
 
-  const searching = (search: string) => {
+  const searchingItem = (search: string) => {
     setSearch(search);
     setPage(1);
     setFilters(activeKey, { search, page: 1 });
   };
+
+  if (isError) {
+    const { message, statusCode, error } = handleApiError(e);
+    return (
+      <CustomError
+        error={{
+          message,
+          statusCode,
+          error,
+        }}
+        onRefresh={refetch}
+      />
+    );
+  }
 
   return (
     <>
@@ -124,26 +170,13 @@ export function CentroCustosContent() {
             <SearchBar
               placeholder="Buscar por descrição..."
               search={search}
-              onSubmit={searching}
+              onSubmit={searchingItem}
             />
           </div>
-          {havePermission("centro_custos_create") && (
-            <>
-              <Button
-                onClick={() => setShowModal(true)}
-                className="md:flex hidden h-8"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Novo Centro de Custo
-              </Button>
-              <Button
-                onClick={() => setShowModal(true)}
-                className="md:hidden ml-4 h-8"
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </>
-          )}
+          <Button onClick={addItem} className="h-8 flex items-center">
+            <Plus className="h-4 w-4 mr-0 md:ml-2" />
+            <span className="hidden md:inline">Novo Centro de Custo</span>
+          </Button>
         </div>
         <div className="h-full">
           {isLoading && !data && (

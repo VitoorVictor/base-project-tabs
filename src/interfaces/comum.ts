@@ -11,8 +11,8 @@ export interface IResponse<T> {
   items: T[];
 }
 
-export interface IResponseFetch {
-  response?: any;
+export interface IResponseFetch<T> {
+  response?: T;
   message: string;
   error: string;
   statusCode: number;

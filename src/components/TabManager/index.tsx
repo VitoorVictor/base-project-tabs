@@ -2,13 +2,31 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useTabStore } from "@/store/tabStore";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { usePermissionStore } from "@/store/permissionStore";
+import { fetchUsuarioPermissao } from "@/services/usuario";
+import { handleApiError } from "@/utils/handleApiError";
+import { toast } from "react-toastify";
 
 export function TabManager({ children }: { children: ReactNode }) {
   const { tabs, activeKey, setActiveKey, closeTab } = useTabStore();
+  const { setPermissions } = usePermissionStore();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetchUsuarioPermissao();
+        setPermissions(res);
+      } catch (e) {
+        const { message } = handleApiError(e);
+        toast.error(message || "Erro ao buscar permissões do usuário");
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col h-full">

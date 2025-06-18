@@ -46,10 +46,7 @@ export function FormContent({
 
   useEffect(() => {
     if (data) {
-      reset({
-        descricao: data.descricao,
-        ativo: data.ativo,
-      });
+      reset(data);
     }
   }, [data]);
 
