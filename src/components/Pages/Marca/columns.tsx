@@ -1,13 +1,6 @@
 import { ColumnConfig } from "@/components/CustomTable";
-import { ICentroCusto } from "@/interfaces/centro-custo";
 import { IMarca } from "@/interfaces/marca";
-import {
-  CheckCircle2,
-  ClipboardList,
-  Pencil,
-  Trash2,
-  XCircle,
-} from "lucide-react";
+import { ClipboardList, Pencil, Trash2 } from "lucide-react";
 
 export const columns: ColumnConfig<IMarca>[] = [
   {

@@ -5,7 +5,6 @@ import type React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormSchema } from "./schema";
-import { CustomSwitch } from "@/components/CustomInputs/custom-switch";
 import { FooterModal } from "@/components/FooterModal";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

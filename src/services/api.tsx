@@ -16,7 +16,7 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOGE5YzlkNC0xMDI5LTQyZjUtOTZkYi00YjliMzgyMTBkYWIiLCJlbWFpbCI6InRlc3RlQG1zMXNpc3RlbWFzLmNvbS5iciIsInR5cGUiOiJhY2Nlc3MiLCJtb2R1bG8iOjMsImlkIjoxLCJub21lIjoiVGVzdGUiLCJyYW1hbCI6IjIwMyIsImlhdCI6MTc1MDI3MDE1MSwiZXhwIjoxNzUwMjc3MzUxfQ.a8_e-f_EUtVgixLLpQu0_vk_ibHN0HVLFYxUt9euXSA",
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOGE5YzlkNC0xMDI5LTQyZjUtOTZkYi00YjliMzgyMTBkYWIiLCJlbWFpbCI6InRlc3RlQG1zMXNpc3RlbWFzLmNvbS5iciIsInR5cGUiOiJhY2Nlc3MiLCJtb2R1bG8iOjMsImlkIjoxLCJub21lIjoiVGVzdGUiLCJyYW1hbCI6IjIwMyIsImlhdCI6MTc1MDI3ODIyNSwiZXhwIjoxNzUwMjg1NDI1fQ.jTVxKvCqTnxzYLF-t-PIUaFnOBSSVrqUSnHuvRMMt2k",
   },
 });
 
