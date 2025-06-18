@@ -131,14 +131,14 @@ export function CentroCustosContent() {
             <>
               <Button
                 onClick={() => setShowModal(true)}
-                className="md:flex hidden"
+                className="md:flex hidden h-8"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Novo Centro de Custo
               </Button>
               <Button
                 onClick={() => setShowModal(true)}
-                className="md:hidden ml-4"
+                className="md:hidden ml-4 h-8"
               >
                 <Plus className="h-4 w-4" />
               </Button>

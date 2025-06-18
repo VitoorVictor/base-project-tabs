@@ -35,7 +35,7 @@ export default function SearchBar({
       <div className="relative">
         <Input
           placeholder={placeholder}
-          className="w-full truncate rounded-md bg-background pr-10 pl-3"
+          className="w-full truncate rounded-md bg-background pr-10 pl-3 h-8"
           {...form.register("search")}
         />
 
