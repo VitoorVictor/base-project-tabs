@@ -8,56 +8,48 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOGE5YzlkNC0xMDI5LTQyZjUtOTZkYi00YjliMzgyMTBkYWIiLCJlbWFpbCI6InRlc3RlQG1zMXNpc3RlbWFzLmNvbS5iciIsInR5cGUiOiJhY2Nlc3MiLCJtb2R1bG8iOjMsImlkIjoxLCJub21lIjoiVGVzdGUiLCJyYW1hbCI6IjIwMyIsImlhdCI6MTc1MDE2NjUxMywiZXhwIjoxNzUwMTczNzEzfQ.mr0CYmaZ7WEceN7yZ4C0wNOawV6HUNS0qhbA18GRTaU",
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOGE5YzlkNC0xMDI5LTQyZjUtOTZkYi00YjliMzgyMTBkYWIiLCJlbWFpbCI6InRlc3RlQG1zMXNpc3RlbWFzLmNvbS5iciIsInR5cGUiOiJhY2Nlc3MiLCJtb2R1bG8iOjMsImlkIjoxLCJub21lIjoiVGVzdGUiLCJyYW1hbCI6IjIwMyIsImlhdCI6MTc1MDI3MDE1MSwiZXhwIjoxNzUwMjc3MzUxfQ.a8_e-f_EUtVgixLLpQu0_vk_ibHN0HVLFYxUt9euXSA",
   },
 });
 
-export const serviceCentroCusto = {
-  getAll: async (filters: IFilterQry): Promise<IResponse<ICentroCusto>> => {
-    const params: Record<string, string | number> = {};
+export async function fetchCentroCustoAll(
+  filters: IFilterQry
+): Promise<IResponse<ICentroCusto>> {
+  const params: Record<string, string | number> = {};
 
-    if (filters.page !== undefined) params.page = filters.page;
-    if (filters.type) params.type = filters.type.toUpperCase();
-    if (filters.order) params.order = filters.order;
-    if (filters.search) params.descricao = filters.search;
+  if (filters.page !== undefined) params.page = filters.page;
+  if (filters.type) params.type = filters.type.toUpperCase();
+  if (filters.order) params.order = filters.order;
+  if (filters.search) params.descricao = filters.search;
 
-    try {
-      const response = await api.get(`/centro-custos`, { params });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-  getOne: async (id: string): Promise<ICentroCusto> => {
-    try {
-      const response = await api.get(`/centro-custos/${id}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-  create: async (data: any): Promise<IResponseFetch> => {
-    try {
-      const response = await api.post("/centro-custos", data);
-      return response.data;
-    } catch (err) {
-      throw err;
-    }
-  },
-  update: async (id: string, data: any): Promise<IResponseFetch> => {
-    try {
-      const response = await api.patch(`/centro-custos/${id}`, data);
-      return response.data;
-    } catch (err) {
-      throw err;
-    }
-  },
-  delete: async (id: string, body: {}): Promise<IResponseFetch> => {
-    try {
-      const response = await api.delete(`/centro-custos/${id}`, { data: body });
-      return response.data;
-    } catch (err) {
-      throw err;
-    }
-  },
-};
+  const { data } = await api.get(`/centro-custos`, { params });
+  return data;
+}
+
+export async function fetchCentroCustoOne(id: string): Promise<ICentroCusto> {
+  const { data } = await api.get(`/centro-custos/${id}`);
+  return data;
+}
+
+export async function createCentroCusto(body: any): Promise<IResponseFetch> {
+  const { data } = await api.post("/centro-custos", body);
+  return data;
+}
+
+export async function updateCentroCusto(
+  id: string,
+  body: any
+): Promise<IResponseFetch> {
+  const { data } = await api.patch(`/centro-custos/${id}`, body);
+  return data;
+}
+
+export async function deleteCentroCusto(
+  id: string,
+  password: string
+): Promise<IResponseFetch> {
+  const { data: res } = await api.delete(`/centro-custos/${id}`, {
+    data: { password },
+  });
+  return res;
+}

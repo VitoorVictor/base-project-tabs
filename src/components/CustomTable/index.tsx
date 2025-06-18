@@ -63,6 +63,15 @@ export interface DropdownsConfig<T> {
   color?: string;
   disabled?: (row: T) => boolean;
   render?: (row: T) => React.ReactNode;
+  onClick?: (row: T, actionName: string) => void;
+}
+
+export interface TableActions<T> {
+  onUpdate?: (id: string, row: T) => void;
+  onDelete?: (id: string, row: T) => void;
+  onDetails?: (id: string, row: T) => void;
+  onAnexo?: (id: string, row: T) => void;
+  onCustomAction?: (actionName: string, id: string, row: T) => void;
 }
 
 type CustomTableProps<T> = {
@@ -74,6 +83,8 @@ type CustomTableProps<T> = {
   order: string;
   type: string;
   onOrderChange: (column: string) => void;
+  onRowClick: (row: T) => void;
+  actions?: TableActions<T>;
 };
 
 export default function CustomTable<T>({
@@ -85,34 +96,41 @@ export default function CustomTable<T>({
   order,
   type,
   onOrderChange,
+  onRowClick,
+  actions,
 }: CustomTableProps<T>) {
-  //   const { nvp } = usePermission();
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  // const { nvp } = usePermission();
+  // const router = useRouter();
+  // const pathname = usePathname();
+  // const searchParams = useSearchParams();
+  // const pathSegments = pathname.split("/").filter(Boolean);
+  // const currentParams = new URLSearchParams(searchParams.toString());
 
-  const pathSegments = pathname.split("/").filter(Boolean);
+  const handleAction = (actionName: string, row: T) => {
+    const id = String((row as Record<string, any>)[actionsReference]);
 
-  const currentParams = new URLSearchParams(searchParams.toString());
+    const dropdown = dropdowns?.find((d) => d.name === actionName);
+    if (dropdown?.onClick) {
+      dropdown.onClick(row, actionName);
+      return;
+    }
 
-  const onClickActions = (action: string, id: string) => {
-    if (action === "update") {
-      currentParams.set("modal", "true");
-      currentParams.set("id", id);
-      router.push(`?${currentParams.toString()}`);
-    } else if (action === "delete") {
-      currentParams.set("dialog", "true");
-      currentParams.set("id", id);
-      router.push(`?${currentParams.toString()}`);
-    } else if (action === "details") {
-      currentParams.set("modal", "true");
-      currentParams.set("details", "true");
-      currentParams.set("id", id);
-      router.push(`?${currentParams.toString()}`);
-    } else if (action === "anexo") {
-      currentParams.set("anexo", "true");
-      currentParams.set("id", id);
-      router.push(`?${currentParams.toString()}`);
+    switch (actionName) {
+      case "update":
+        actions?.onUpdate?.(id, row);
+        break;
+      case "delete":
+        actions?.onDelete?.(id, row);
+        break;
+      case "details":
+        actions?.onDetails?.(id, row);
+        break;
+      case "anexo":
+        actions?.onAnexo?.(id, row);
+        break;
+      default:
+        actions?.onCustomAction?.(actionName, id, row);
+        break;
     }
   };
 
@@ -143,12 +161,10 @@ export default function CustomTable<T>({
         <TableHeader className="bg-background-alt text-accent-foreground rounded-lg">
           <TableRow>
             {columns.map((col) => {
-              const colKey = String(col.key);
-              const isActive = colKey === order;
-
+              const isActive = String(col.key) === order;
               return (
                 <TableHead
-                  key={colKey}
+                  key={String(col.key)}
                   className={clsx(
                     "h-9 text-left font-medium text-label",
                     col.headerClassName
@@ -156,23 +172,23 @@ export default function CustomTable<T>({
                 >
                   {col.sorted ? (
                     <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        onClick={() => onOrderChange(colKey)}
-                        size="sm"
+                      <button
+                        onClick={() => onOrderChange(String(col.key))}
                         className={clsx(
-                          "p-0 hover:bg-transparent",
+                          "hover:bg-transparent cursor-pointer flex justify-between items-center gap-1",
                           isActive && "font-bold"
                         )}
                       >
                         {col.label}
-                      </Button>
-                      {isActive &&
-                        (type === "asc" ? (
-                          <ArrowDown className="h-4 w-4" />
-                        ) : (
-                          <ArrowUp className="h-4 w-4" />
-                        ))}
+                        {isActive && (
+                          <ArrowDown
+                            className={clsx(
+                              "h-4 w-4 transition-transform duration-200",
+                              isActive && type === "desc" && "rotate-180"
+                            )}
+                          />
+                        )}
+                      </button>
                     </div>
                   ) : (
                     col.label
@@ -192,6 +208,7 @@ export default function CustomTable<T>({
                 <TableRow
                   key={index}
                   className={index % 2 ? "bg-background-alt" : "bg-white"}
+                  onClick={() => onRowClick(row)}
                 >
                   {columns.map((col) => (
                     <TableCell
@@ -240,20 +257,8 @@ export default function CustomTable<T>({
                                     //   )}_${dropdown.permission}`
                                     // )
                                   }
-                                  onClick={
-                                    () =>
-                                      //   {dropdown.name === "anexo"
-                                      //  ? onClickActions(dropdown.name, row.id)
-                                      //  :
-                                      onClickActions(
-                                        dropdown.name,
-                                        String(
-                                          (row as Record<string, any>)[
-                                            actionsReference
-                                          ]
-                                        )
-                                      )
-                                    // }
+                                  onClick={() =>
+                                    handleAction(dropdown.name, row)
                                   }
                                   className={clsx(
                                     "cursor-pointer gap-2 text-label",

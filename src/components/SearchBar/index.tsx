@@ -3,42 +3,37 @@
 import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
 interface CustomHeaderPageProps {
   placeholder: string;
-  nameSearch: string;
+  search: string;
+  onSubmit: (search: string) => void;
 }
+
+type SearchForm = { search: string };
 
 export default function SearchBar({
   placeholder,
-  nameSearch,
+  search,
+  onSubmit,
 }: CustomHeaderPageProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentParams = new URLSearchParams(searchParams.toString());
-  const search = searchParams.get(nameSearch) || "";
-
-  const onSubmit = (values: any) => {
-    currentParams.set(nameSearch, values.search);
-    router.push(`?${currentParams.toString()}`);
-  };
-
-  const form = useForm<any>({
+  const form = useForm<SearchForm>({
     defaultValues: {
       search: search,
     },
   });
+  const onSubmitForm = (values: SearchForm) => {
+    onSubmit(values.search);
+  };
 
   const searchValue = form.watch("search");
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form onSubmit={form.handleSubmit(onSubmitForm)}>
       <div className="relative">
         <Input
-          // type="search"
           placeholder={placeholder}
           className="w-full truncate rounded-md bg-background pr-10 pl-3"
           {...form.register("search")}
@@ -49,7 +44,7 @@ export default function SearchBar({
             type="button"
             onClick={() => {
               form.setValue("search", "");
-              form.handleSubmit(onSubmit)();
+              form.handleSubmit(onSubmitForm)();
             }}
             className="cursor-pointer absolute right-14 top-1/2 -translate-y-1/2 flex items-center justify-center rounded p-2 hover:text-red-500"
           >
@@ -73,4 +68,3 @@ export default function SearchBar({
     </form>
   );
 }
-// }

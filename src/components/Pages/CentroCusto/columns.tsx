@@ -1,6 +1,12 @@
 import { ColumnConfig } from "@/components/CustomTable";
 import { ICentroCusto } from "@/interfaces/centro-custo";
-import { CheckCircle2, Pencil, Trash2, XCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  ClipboardList,
+  Pencil,
+  Trash2,
+  XCircle,
+} from "lucide-react";
 
 export const columns: ColumnConfig<ICentroCusto>[] = [
   {
@@ -35,6 +41,12 @@ export const columns: ColumnConfig<ICentroCusto>[] = [
 ];
 
 export const dropdowns = [
+  {
+    name: "details",
+    label: "Detalhes",
+    icon: <ClipboardList />,
+    permission: "findOne",
+  },
   {
     name: "update",
     label: "Alterar",
