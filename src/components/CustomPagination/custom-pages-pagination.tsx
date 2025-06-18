@@ -9,7 +9,14 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 
-export function CustomPagesPagination({ metaData }: { metaData: IMeta }) {
+interface CustomPagesPaginationProps {
+  metaData: IMeta;
+  setPage: (page: number) => void;
+}
+export function CustomPagesPagination({
+  metaData,
+  setPage,
+}: CustomPagesPaginationProps) {
   const totalPages = metaData.totalPages;
   const currentPage = metaData.currentPage;
   return (
@@ -19,9 +26,9 @@ export function CustomPagesPagination({ metaData }: { metaData: IMeta }) {
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                href="#"
                 onClick={(e) => {
                   e.preventDefault();
+                  setPage(currentPage - 1);
                 }}
                 className={
                   currentPage === 1 ? "pointer-events-none opacity-50" : ""
@@ -35,7 +42,7 @@ export function CustomPagesPagination({ metaData }: { metaData: IMeta }) {
               if (
                 page === 1 ||
                 page === totalPages ||
-                (page >= currentPage - 1 && page <= currentPage + 1)
+                (page >= currentPage - 2 && page <= currentPage + 2)
               ) {
                 return (
                   <PaginationItem key={page}>
@@ -43,6 +50,7 @@ export function CustomPagesPagination({ metaData }: { metaData: IMeta }) {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
+                        setPage(page);
                       }}
                       className={
                         currentPage === page
@@ -55,7 +63,7 @@ export function CustomPagesPagination({ metaData }: { metaData: IMeta }) {
                     </PaginationLink>
                   </PaginationItem>
                 );
-              } else if (page === currentPage - 2 || page === currentPage + 2) {
+              } else if (page === currentPage - 3 || page === currentPage + 3) {
                 return (
                   <PaginationItem key={page}>
                     <PaginationEllipsis />
@@ -67,9 +75,9 @@ export function CustomPagesPagination({ metaData }: { metaData: IMeta }) {
 
             <PaginationItem>
               <PaginationNext
-                href="#"
                 onClick={(e) => {
                   e.preventDefault();
+                  setPage(currentPage + 1);
                 }}
                 className={
                   currentPage === totalPages

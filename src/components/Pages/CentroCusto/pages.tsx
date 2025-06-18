@@ -199,7 +199,9 @@ export function CentroCustosContent() {
           )}
         </div>
         {data && <CustomIndexPagination metaData={data.meta} />}
-        {data && <CustomPagesPagination metaData={data.meta} />}
+        {data && (
+          <CustomPagesPagination metaData={data.meta} setPage={setPage} />
+        )}
       </div>
       <ResponsiveModal
         title={isCreate ? "Novo centro de custo" : "Atualizar centro de custo"}
