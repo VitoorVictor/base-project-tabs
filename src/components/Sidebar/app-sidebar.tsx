@@ -25,6 +25,7 @@ import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
 import { CentroCustosContent } from "../Pages/CentroCusto/pages";
 import { MarcaPage } from "../Pages/Marca/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
+import { EstadoCivilPage } from "../Pages/EstadoCivil/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -100,7 +101,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Estados Civis",
               key: "estado-civis",
               permission: "estado_civis_findAll",
-              component: CentroCustosContent,
+              component: EstadoCivilPage,
             },
             {
               title: "Grupos de pessoas",
