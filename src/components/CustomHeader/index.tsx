@@ -1,8 +1,8 @@
-interface HeaderProps {
+interface CustomHeaderProps {
   title: string;
   subtitle?: string;
 }
-export function Header({ title, subtitle }: HeaderProps) {
+export function CustomHeader({ title, subtitle }: CustomHeaderProps) {
   return (
     <div>
       <h2 className="text-xl font-bold">{title}</h2>

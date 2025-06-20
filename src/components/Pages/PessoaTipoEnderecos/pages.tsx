@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import CustomTable, { TableActions } from "@/components/CustomTable";
 import { columns, dropdowns } from "./columns";
-import { Header } from "../Header";
+import { CustomHeader } from "../../CustomHeader";
 import SearchBar from "@/components/SearchBar";
 import { CustomPagesPagination } from "@/components/CustomPagination/custom-pages-pagination";
 import { CustomIndexPagination } from "@/components/CustomPagination/custom-index-pagination";
@@ -164,7 +164,7 @@ export function PessoaTipoEnderecoPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Tipo de Endereços" />
+        <CustomHeader title="Tipo de Endereços" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
@@ -204,7 +204,9 @@ export function PessoaTipoEnderecoPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo tipo de endereço" : "Atualizar tipo de endereço"}
+        title={
+          isCreate ? "Novo tipo de endereço" : "Atualizar tipo de endereço"
+        }
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."

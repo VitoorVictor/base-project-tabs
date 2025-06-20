@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import CustomTable, { TableActions } from "@/components/CustomTable";
 import { columns, dropdowns } from "./columns";
-import { Header } from "../Header";
+import { CustomHeader } from "../../CustomHeader";
 import SearchBar from "@/components/SearchBar";
 import { CustomPagesPagination } from "@/components/CustomPagination/custom-pages-pagination";
 import { CustomIndexPagination } from "@/components/CustomPagination/custom-index-pagination";
@@ -151,7 +151,7 @@ export function GrupoPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Grupos" />
+        <CustomHeader title="Grupos" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
