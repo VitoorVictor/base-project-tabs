@@ -34,6 +34,7 @@ import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 import { RecpagClassificacaoPage } from "../Pages/RecpagClassificao/pages";
 import { RecpagDocumentoTipoPage } from "../Pages/RecpagDocumentoTipos/pages";
 import { PessoaGrupoPage } from "../Pages/PessoaGrupos/pages";
+import { PlanoContaPage } from "../Pages/PlanoContas/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -91,10 +92,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: CentroCustosPage,
             },
             {
+              icon: HandCoins,
               title: "Plano de Contas",
               key: "plano-contas",
               permission: "plano_contas_findAll",
-              component: CentroCustosPage,
+              component: PlanoContaPage,
             },
           ],
         },

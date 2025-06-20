@@ -11,11 +11,11 @@ export function TanstackProvider({ children }: { children: ReactNode }) {
         refetchOnMount: true,
         refetchOnWindowFocus: true,
         staleTime: 1000 * 60 * 1, // 1 minutos
-        retry: 3,
+        retry: 2,
         retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
       },
       mutations: {
-        retry: true,
+        retry: 2,
       },
     },
   });
