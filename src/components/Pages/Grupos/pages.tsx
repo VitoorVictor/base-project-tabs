@@ -73,17 +73,17 @@ export function GrupoPage() {
       const res = await deleteGrupo.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
-        toast.success(res.message || "Exclusão de marca realizada com êxito");
+        toast.success(res.message || "Exclusão de grupo realizada com êxito");
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír marca");
+      toast.error(message || "Erro ao excluír grupo");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("marcas_create")) {
-      toast.warning(messageToastHelper.accessDenied("o cadastro de marca"));
+    if (!hasPermission("grupos_create")) {
+      toast.warning(messageToastHelper.accessDenied("o cadastro de grupo"));
       return;
     }
     setShowModal(true);
@@ -91,24 +91,24 @@ export function GrupoPage() {
 
   const actions: TableActions<IGrupo> = {
     onUpdate: (id) => {
-      if (!hasPermission("marcas_update")) {
-        toast.warning(messageToastHelper.accessDenied("a alteração de marca"));
+      if (!hasPermission("grupos_update")) {
+        toast.warning(messageToastHelper.accessDenied("a alteração de grupo"));
         return;
       }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("marcas_delete")) {
-        toast.warning(messageToastHelper.accessDenied("a exclusão de marca"));
+      if (!hasPermission("grupos_delete")) {
+        toast.warning(messageToastHelper.accessDenied("a exclusão de grupo"));
         return;
       }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("marcas_findOne")) {
-        toast.warning(messageToastHelper.accessDenied("o detalhes de marca"));
+      if (!hasPermission("grupos_findOne")) {
+        toast.warning(messageToastHelper.accessDenied("o detalhes de grupo"));
         return;
       }
       setShowDetails(true);
@@ -191,7 +191,7 @@ export function GrupoPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo marca" : "Atualizar marca"}
+        title={isCreate ? "Novo grupo" : "Atualizar grupo"}
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."
