@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { ICentroCusto } from "@/interfaces/centro-custo";
 import CustomTable, { TableActions } from "@/components/CustomTable";
 import { columns, dropdowns } from "./columns";
 import { Header } from "../Header";
@@ -11,6 +12,10 @@ import { CustomPagesPagination } from "@/components/CustomPagination/custom-page
 import { CustomIndexPagination } from "@/components/CustomPagination/custom-index-pagination";
 import { ResponsiveModal } from "@/components/ResponsiveModal";
 import { FormContent } from "./form-content";
+import {
+  useCentroCustos,
+  useDeleteCentroCusto,
+} from "@/hooks/tanstack/useCentroCusto";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { handleApiError } from "@/utils/handleApiError";
 import { toast } from "react-toastify";
@@ -19,10 +24,8 @@ import { useFilterStore } from "@/store/filterStore";
 import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
-import { useDeleteGrupo, useGrupos } from "@/hooks/tanstack/useGrupo";
-import { IGrupo } from "@/interfaces/grupo";
 
-export function GrupoPage() {
+export function CentroCustosPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
@@ -53,14 +56,14 @@ export function GrupoPage() {
 
   const isCreate = !id;
 
-  const deleteGrupo = useDeleteGrupo();
+  const deleteCentroCusto = useDeleteCentroCusto();
   const {
     data,
     isLoading,
     isError,
     error: e,
     refetch,
-  } = useGrupos({
+  } = useCentroCustos({
     order,
     type,
     page,
@@ -70,45 +73,55 @@ export function GrupoPage() {
   const deleteItem = async (password: string) => {
     try {
       if (!id) return;
-      const res = await deleteGrupo.mutateAsync({ id, password });
+      const res = await deleteCentroCusto.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
-        toast.success(res.message || "Exclusão de grupo realizada com êxito");
+        toast.success(
+          res.message || "Exclusão de centro de custo realizada com êxito"
+        );
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír grupo");
+      toast.error(message || "Erro ao excluír centro de custo");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("grupos_create")) {
-      toast.warning(messageToastHelper.accessDenied("o cadastro de grupo"));
+    if (!hasPermission("centro_custos_create")) {
+      toast.warning(
+        messageToastHelper.accessDenied("o cadastro de centro de custo")
+      );
       return;
     }
     setShowModal(true);
   };
 
-  const actions: TableActions<IGrupo> = {
+  const actions: TableActions<ICentroCusto> = {
     onUpdate: (id) => {
-      if (!hasPermission("grupos_update")) {
-        toast.warning(messageToastHelper.accessDenied("a alteração de grupo"));
+      if (!hasPermission("centro_custos_update")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a alteração de centro de custo")
+        );
         return;
       }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("grupos_delete")) {
-        toast.warning(messageToastHelper.accessDenied("a exclusão de grupo"));
+      if (!hasPermission("centro_custos_delete")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a exclusão de centro de custo")
+        );
         return;
       }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("grupos_findOne")) {
-        toast.warning(messageToastHelper.accessDenied("o detalhes de grupo"));
+      if (!hasPermission("centro_custos_findOne")) {
+        toast.warning(
+          messageToastHelper.accessDenied("o detalhes de centro de custo")
+        );
         return;
       }
       setShowDetails(true);
@@ -151,7 +164,7 @@ export function GrupoPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Grupos" />
+        <Header title="Centros de Custos" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
@@ -162,7 +175,7 @@ export function GrupoPage() {
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Grupo</span>
+            <span className="hidden md:inline">Novo Centro de Custo</span>
           </Button>
         </div>
         <div className="h-full">
@@ -191,7 +204,7 @@ export function GrupoPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo grupo" : "Atualizar grupo"}
+        title={isCreate ? "Novo centro de custo" : "Atualizar centro de custo"}
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."

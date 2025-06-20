@@ -22,10 +22,15 @@ import {
   ShieldPlus,
 } from "lucide-react";
 import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
-import { CentroCustosContent } from "../Pages/CentroCusto/pages";
-import { MarcaPage } from "../Pages/Marca/pages";
+import { CentroCustosPage } from "../Pages/CentroCustos/pages";
+import { MarcaPage } from "../Pages/Marcas/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
 import { EstadoCivilPage } from "../Pages/EstadoCivil/pages";
+import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
+import { ContaPage } from "../Pages/Contas/pages";
+import { PessoaSituacaoPage } from "../Pages/PessoaSituacao/pages";
+import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
+import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -52,38 +57,39 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Tipo de Rec./Pag.",
               key: "recpag-documento-tipos",
               permission: "recpag_documento_tipos_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               icon: HandCoins,
               title: "Centros de Custos",
               key: "centro-custos",
               permission: "centro_custos_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Classificações de Rec./Pag.",
               key: "recpag-classificacoes",
               permission: "recpag_classificacoes_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
+              icon: HandCoins,
               title: "Contas Correntes/Caixa",
               key: "contas",
               permission: "contas_findAll",
-              component: CentroCustosContent,
+              component: ContaPage,
             },
             {
               title: "Formas de Pagamentos",
               key: "formas-pagamentos",
               permission: "contas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Plano de Contas",
               key: "plano-contas",
               permission: "plano_contas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
           ],
         },
@@ -95,7 +101,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Clientes e Fornecedores",
               key: "pessoas",
               permission: "pessoas_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
               title: "Estados Civis",
@@ -107,29 +113,35 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Grupos de pessoas",
               key: "pessoa-grupos",
               permission: "pessoa_grupos_findAll",
-              component: CentroCustosContent,
+              component: CentroCustosPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Origens",
               key: "pessoa-origens",
               permission: "pessoa_origens_findAll",
-              component: CentroCustosContent,
+              component: PessoaOrigemPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Situações",
               key: "pessoa-situacoes",
               permission: "pessoa_situacoes_findAll",
-              component: CentroCustosContent,
+              component: PessoaSituacaoPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Tipos de Contatos",
               key: "pessoa-tipo-contatos",
               permission: "pessoa_tipo_contatos_findAll",
+              component: PessoaTipoContatoPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Tipos de Endereços",
               key: "pessoa-tipo-enderecos",
               permission: "pessoa_tipo_enderecos_findAll",
+              component: PessoaTipoEnderecoPage,
             },
           ],
         },

@@ -19,10 +19,13 @@ import { useFilterStore } from "@/store/filterStore";
 import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
-import { useDeleteMarca, useMarcas } from "@/hooks/tanstack/useMarca";
-import { IMarca } from "@/interfaces/marca";
+import { IPessoaSituacao } from "@/interfaces/pessoa-situacao";
+import {
+  useDeletePessoaSituacao,
+  usePessoaSituacoes,
+} from "@/hooks/tanstack/usePessoaSituacao";
 
-export function MarcaPage() {
+export function PessoaSituacaoPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
@@ -53,14 +56,14 @@ export function MarcaPage() {
 
   const isCreate = !id;
 
-  const deleteMarca = useDeleteMarca();
+  const deletePessoaSituacao = useDeletePessoaSituacao();
   const {
     data,
     isLoading,
     isError,
     error: e,
     refetch,
-  } = useMarcas({
+  } = usePessoaSituacoes({
     order,
     type,
     page,
@@ -70,45 +73,53 @@ export function MarcaPage() {
   const deleteItem = async (password: string) => {
     try {
       if (!id) return;
-      const res = await deleteMarca.mutateAsync({ id, password });
+      const res = await deletePessoaSituacao.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
-        toast.success(res.message || "Exclusão de marca realizada com êxito");
+        toast.success(
+          res.message || "Exclusão de situação realizada com êxito"
+        );
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír marca");
+      toast.error(message || "Erro ao excluír situação");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("marcas_create")) {
-      toast.warning(messageToastHelper.accessDenied("o cadastro de marca"));
+    if (!hasPermission("pessoa_situacoes_create")) {
+      toast.warning(messageToastHelper.accessDenied("o cadastro de situação"));
       return;
     }
     setShowModal(true);
   };
 
-  const actions: TableActions<IMarca> = {
+  const actions: TableActions<IPessoaSituacao> = {
     onUpdate: (id) => {
-      if (!hasPermission("marcas_update")) {
-        toast.warning(messageToastHelper.accessDenied("a alteração de marca"));
+      if (!hasPermission("pessoa_situacoes_update")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a alteração de situação")
+        );
         return;
       }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("marcas_delete")) {
-        toast.warning(messageToastHelper.accessDenied("a exclusão de marca"));
+      if (!hasPermission("pessoa_situacoes_delete")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a exclusão de situação")
+        );
         return;
       }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("marcas_findOne")) {
-        toast.warning(messageToastHelper.accessDenied("o detalhes de marca"));
+      if (!hasPermission("pessoa_situacoes_findOne")) {
+        toast.warning(
+          messageToastHelper.accessDenied("o detalhes de situação")
+        );
         return;
       }
       setShowDetails(true);
@@ -151,7 +162,7 @@ export function MarcaPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Marcas" />
+        <Header title="Situações" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
@@ -162,7 +173,7 @@ export function MarcaPage() {
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Marca</span>
+            <span className="hidden md:inline">Nova Situação</span>
           </Button>
         </div>
         <div className="h-full">
@@ -191,7 +202,7 @@ export function MarcaPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo marca" : "Atualizar marca"}
+        title={isCreate ? "Nova situação" : "Atualizar situação"}
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."

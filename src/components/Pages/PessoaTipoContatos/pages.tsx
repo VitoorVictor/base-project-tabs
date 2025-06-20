@@ -19,10 +19,13 @@ import { useFilterStore } from "@/store/filterStore";
 import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
-import { useDeleteGrupo, useGrupos } from "@/hooks/tanstack/useGrupo";
-import { IGrupo } from "@/interfaces/grupo";
+import {
+  useDeletePessoaTipoContato,
+  usePessoaTipoContatos,
+} from "@/hooks/tanstack/usePessoaTipoContato";
+import { IPessoaTipoContato } from "@/interfaces/pessoa-tipo-contato";
 
-export function GrupoPage() {
+export function PessoaTipoContatoPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
@@ -53,14 +56,14 @@ export function GrupoPage() {
 
   const isCreate = !id;
 
-  const deleteGrupo = useDeleteGrupo();
+  const deletePessoaTipoContato = useDeletePessoaTipoContato();
   const {
     data,
     isLoading,
     isError,
     error: e,
     refetch,
-  } = useGrupos({
+  } = usePessoaTipoContatos({
     order,
     type,
     page,
@@ -70,45 +73,55 @@ export function GrupoPage() {
   const deleteItem = async (password: string) => {
     try {
       if (!id) return;
-      const res = await deleteGrupo.mutateAsync({ id, password });
+      const res = await deletePessoaTipoContato.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
-        toast.success(res.message || "Exclusão de grupo realizada com êxito");
+        toast.success(
+          res.message || "Exclusão de tipo contato realizada com êxito"
+        );
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír grupo");
+      toast.error(message || "Erro ao excluír tipo contato");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("grupos_create")) {
-      toast.warning(messageToastHelper.accessDenied("o cadastro de grupo"));
+    if (!hasPermission("pessoa_tipo_contatos_create")) {
+      toast.warning(
+        messageToastHelper.accessDenied("o cadastro de tipo contato")
+      );
       return;
     }
     setShowModal(true);
   };
 
-  const actions: TableActions<IGrupo> = {
+  const actions: TableActions<IPessoaTipoContato> = {
     onUpdate: (id) => {
-      if (!hasPermission("grupos_update")) {
-        toast.warning(messageToastHelper.accessDenied("a alteração de grupo"));
+      if (!hasPermission("pessoa_tipo_contatos_update")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a alteração de tipo contato")
+        );
         return;
       }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("grupos_delete")) {
-        toast.warning(messageToastHelper.accessDenied("a exclusão de grupo"));
+      if (!hasPermission("pessoa_tipo_contatos_delete")) {
+        toast.warning(
+          messageToastHelper.accessDenied("a exclusão de tipo contato")
+        );
         return;
       }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("grupos_findOne")) {
-        toast.warning(messageToastHelper.accessDenied("o detalhes de grupo"));
+      if (!hasPermission("pessoa_tipo_contatos_findOne")) {
+        toast.warning(
+          messageToastHelper.accessDenied("o detalhes de tipo contato")
+        );
         return;
       }
       setShowDetails(true);
@@ -151,7 +164,7 @@ export function GrupoPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Grupos" />
+        <Header title="Tipo de Contatos" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
@@ -162,7 +175,7 @@ export function GrupoPage() {
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Grupo</span>
+            <span className="hidden md:inline">Novo Tipo de Contato</span>
           </Button>
         </div>
         <div className="h-full">
@@ -191,7 +204,7 @@ export function GrupoPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo grupo" : "Atualizar grupo"}
+        title={isCreate ? "Novo tipo de contato" : "Atualizar tipo de contato"}
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."

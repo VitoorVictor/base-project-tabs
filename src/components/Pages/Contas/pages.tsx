@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { ICentroCusto } from "@/interfaces/centro-custo";
 import CustomTable, { TableActions } from "@/components/CustomTable";
 import { columns, dropdowns } from "./columns";
 import { Header } from "../Header";
@@ -12,10 +11,6 @@ import { CustomPagesPagination } from "@/components/CustomPagination/custom-page
 import { CustomIndexPagination } from "@/components/CustomPagination/custom-index-pagination";
 import { ResponsiveModal } from "@/components/ResponsiveModal";
 import { FormContent } from "./form-content";
-import {
-  useCentroCustos,
-  useDeleteCentroCusto,
-} from "@/hooks/tanstack/useCentroCusto";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { handleApiError } from "@/utils/handleApiError";
 import { toast } from "react-toastify";
@@ -24,8 +19,10 @@ import { useFilterStore } from "@/store/filterStore";
 import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
+import { useDeleteConta, useContas } from "@/hooks/tanstack/useConta";
+import { IConta } from "@/interfaces/conta";
 
-export function CentroCustosContent() {
+export function ContaPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
@@ -56,14 +53,14 @@ export function CentroCustosContent() {
 
   const isCreate = !id;
 
-  const deleteCentroCusto = useDeleteCentroCusto();
+  const deleteConta = useDeleteConta();
   const {
     data,
     isLoading,
     isError,
     error: e,
     refetch,
-  } = useCentroCustos({
+  } = useContas({
     order,
     type,
     page,
@@ -73,55 +70,45 @@ export function CentroCustosContent() {
   const deleteItem = async (password: string) => {
     try {
       if (!id) return;
-      const res = await deleteCentroCusto.mutateAsync({ id, password });
+      const res = await deleteConta.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
-        toast.success(
-          res.message || "Exclusão de centro de custo realizada com êxito"
-        );
+        toast.success(res.message || "Exclusão de conta realizada com êxito");
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír centro de custo");
+      toast.error(message || "Erro ao excluír conta");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("centro_custos_create")) {
-      toast.warning(
-        messageToastHelper.accessDenied("o cadastro de centro de custo")
-      );
+    if (!hasPermission("contas_create")) {
+      toast.warning(messageToastHelper.accessDenied("o cadastro de conta"));
       return;
     }
     setShowModal(true);
   };
 
-  const actions: TableActions<ICentroCusto> = {
+  const actions: TableActions<IConta> = {
     onUpdate: (id) => {
-      if (!hasPermission("centro_custos_update")) {
-        toast.warning(
-          messageToastHelper.accessDenied("a alteração de centro de custo")
-        );
+      if (!hasPermission("contas_update")) {
+        toast.warning(messageToastHelper.accessDenied("a alteração de conta"));
         return;
       }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("centro_custos_delete")) {
-        toast.warning(
-          messageToastHelper.accessDenied("a exclusão de centro de custo")
-        );
+      if (!hasPermission("contas_delete")) {
+        toast.warning(messageToastHelper.accessDenied("a exclusão de conta"));
         return;
       }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("centro_custos_findOne")) {
-        toast.warning(
-          messageToastHelper.accessDenied("o detalhes de centro de custo")
-        );
+      if (!hasPermission("contas_findOne")) {
+        toast.warning(messageToastHelper.accessDenied("o detalhes de conta"));
         return;
       }
       setShowDetails(true);
@@ -164,7 +151,7 @@ export function CentroCustosContent() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Centros de Custos" />
+        <Header title="Contas" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
@@ -175,7 +162,7 @@ export function CentroCustosContent() {
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Centro de Custo</span>
+            <span className="hidden md:inline">Nova Conta</span>
           </Button>
         </div>
         <div className="h-full">
@@ -204,7 +191,7 @@ export function CentroCustosContent() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo centro de custo" : "Atualizar centro de custo"}
+        title={isCreate ? "Novo conta" : "Atualizar conta"}
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."
