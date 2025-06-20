@@ -25,6 +25,7 @@ import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
 import { CentroCustosPage } from "../Pages/CentroCustos/pages";
 import { MarcaPage } from "../Pages/Marcas/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
+import { EstadoCivilPage } from "../Pages/EstadoCivil/pages";
 import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
 import { ContaPage } from "../Pages/Contas/pages";
 import { PessoaSituacaoPage } from "../Pages/PessoaSituacao/pages";
@@ -106,7 +107,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               title: "Estados Civis",
               key: "estado-civis",
               permission: "estado_civis_findAll",
-              component: CentroCustosPage,
+              component: EstadoCivilPage,
             },
             {
               title: "Grupos de pessoas",
