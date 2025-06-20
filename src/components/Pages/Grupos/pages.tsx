@@ -194,8 +194,8 @@ export function GrupoPage() {
         title={isCreate ? "Novo grupo" : "Atualizar grupo"}
         description={
           isCreate
-            ? "Preencha os dados do tipo do endereço e clique em salvar."
-            : "Atualize os dados do tipo do endereço e clique em salvar."
+            ? "Preencha os dados do grupo e clique em salvar."
+            : "Atualize os dados do grupo e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {

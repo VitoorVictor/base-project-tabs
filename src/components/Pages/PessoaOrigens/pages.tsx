@@ -197,8 +197,8 @@ export function PessoaOrigemPage() {
         title={isCreate ? "Novo origem" : "Atualizar origem"}
         description={
           isCreate
-            ? "Preencha os dados do tipo do endereço e clique em salvar."
-            : "Atualize os dados do tipo do endereço e clique em salvar."
+            ? "Preencha os dados da origem e clique em salvar."
+            : "Atualize os dados da origem e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {

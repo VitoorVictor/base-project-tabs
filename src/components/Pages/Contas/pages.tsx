@@ -194,8 +194,8 @@ export function ContaPage() {
         title={isCreate ? "Novo conta" : "Atualizar conta"}
         description={
           isCreate
-            ? "Preencha os dados do tipo do endereço e clique em salvar."
-            : "Atualize os dados do tipo do endereço e clique em salvar."
+            ? "Preencha os dados da conta e clique em salvar."
+            : "Atualize os dados da conta e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {

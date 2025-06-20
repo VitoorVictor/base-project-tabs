@@ -19,13 +19,13 @@ import { useFilterStore } from "@/store/filterStore";
 import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
+import { IPessoaSituacao } from "@/interfaces/pessoa-situacao";
 import {
-  useDeleteEstadoCivil,
-  useEstadoCivils,
-} from "@/hooks/tanstack/useEstadoCivil";
-import { IEstadoCivil } from "@/interfaces/estado-civil";
+  useDeletePessoaSituacao,
+  usePessoaSituacoes,
+} from "@/hooks/tanstack/usePessoaSituacao";
 
-export function EstadoCivilPage() {
+export function PessoaSituacaoPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
@@ -56,14 +56,14 @@ export function EstadoCivilPage() {
 
   const isCreate = !id;
 
-  const deleteEstadoCivil = useDeleteEstadoCivil();
+  const deletePessoaSituacao = useDeletePessoaSituacao();
   const {
     data,
     isLoading,
     isError,
     error: e,
     refetch,
-  } = useEstadoCivils({
+  } = usePessoaSituacoes({
     order,
     type,
     page,
@@ -73,34 +73,32 @@ export function EstadoCivilPage() {
   const deleteItem = async (password: string) => {
     try {
       if (!id) return;
-      const res = await deleteEstadoCivil.mutateAsync({ id, password });
+      const res = await deletePessoaSituacao.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
         toast.success(
-          res.message || "Exclusão de estado civil realizada com êxito"
+          res.message || "Exclusão de situação realizada com êxito"
         );
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír estado civil");
+      toast.error(message || "Erro ao excluír situação");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("estado_civis_create")) {
-      toast.warning(
-        messageToastHelper.accessDenied("o cadastro de estado civil")
-      );
+    if (!hasPermission("pessoa_situacoes_create")) {
+      toast.warning(messageToastHelper.accessDenied("o cadastro de situação"));
       return;
     }
     setShowModal(true);
   };
 
-  const actions: TableActions<IEstadoCivil> = {
+  const actions: TableActions<IPessoaSituacao> = {
     onUpdate: (id) => {
-      if (!hasPermission("estado_civis_update")) {
+      if (!hasPermission("pessoa_situacoes_update")) {
         toast.warning(
-          messageToastHelper.accessDenied("a alteração de estado civil")
+          messageToastHelper.accessDenied("a alteração de situação")
         );
         return;
       }
@@ -108,9 +106,9 @@ export function EstadoCivilPage() {
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("estado_civis_delete")) {
+      if (!hasPermission("pessoa_situacoes_delete")) {
         toast.warning(
-          messageToastHelper.accessDenied("a exclusão de estado civil")
+          messageToastHelper.accessDenied("a exclusão de situação")
         );
         return;
       }
@@ -118,9 +116,9 @@ export function EstadoCivilPage() {
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("estado_civis_findOne")) {
+      if (!hasPermission("pessoa_situacoes_findOne")) {
         toast.warning(
-          messageToastHelper.accessDenied("o detalhes de estado civil")
+          messageToastHelper.accessDenied("o detalhes de situação")
         );
         return;
       }
@@ -164,7 +162,7 @@ export function EstadoCivilPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <Header title="Estado Civis" />
+        <Header title="Situações" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
@@ -175,7 +173,7 @@ export function EstadoCivilPage() {
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Estado Civil</span>
+            <span className="hidden md:inline">Nova Situação</span>
           </Button>
         </div>
         <div className="h-full">
@@ -204,11 +202,11 @@ export function EstadoCivilPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo estado civil" : "Atualizar estado civil"}
+        title={isCreate ? "Nova situação" : "Atualizar situação"}
         description={
           isCreate
-            ? "Preencha os dados do tipo do endereço e clique em salvar."
-            : "Atualize os dados do tipo do endereço e clique em salvar."
+            ? "Preencha os dados da situação e clique em salvar."
+            : "Atualize os dados da situação e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {

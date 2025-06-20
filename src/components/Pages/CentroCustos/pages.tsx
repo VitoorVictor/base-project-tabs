@@ -207,8 +207,8 @@ export function CentroCustosPage() {
         title={isCreate ? "Novo centro de custo" : "Atualizar centro de custo"}
         description={
           isCreate
-            ? "Preencha os dados do tipo do endereço e clique em salvar."
-            : "Atualize os dados do tipo do endereço e clique em salvar."
+            ? "Preencha os dados do centro de custo e clique em salvar."
+            : "Atualize os dados do centro de custo e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {

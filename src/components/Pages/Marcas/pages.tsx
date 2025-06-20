@@ -194,8 +194,8 @@ export function MarcaPage() {
         title={isCreate ? "Nova marca" : "Atualizar marca"}
         description={
           isCreate
-            ? "Preencha os dados do tipo do endereço e clique em salvar."
-            : "Atualize os dados do tipo do endereço e clique em salvar."
+            ? "Preencha os dados da marca e clique em salvar."
+            : "Atualize os dados da marca e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {

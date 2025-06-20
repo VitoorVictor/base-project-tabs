@@ -25,10 +25,10 @@ import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
 import { CentroCustosPage } from "../Pages/CentroCustos/pages";
 import { MarcaPage } from "../Pages/Marcas/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
-import { EstadoCivilPage } from "../Pages/EstadoCivil/pages";
+import { EstadoCivilPage } from "../Pages/EstadoCivis/pages";
 import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
 import { ContaPage } from "../Pages/Contas/pages";
-import { PessoaSituacaoPage } from "../Pages/PessoaSituacao/pages";
+import { PessoaSituacaoPage } from "../Pages/PessoaSituacoes/pages";
 import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
 import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 
