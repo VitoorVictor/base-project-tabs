@@ -33,6 +33,7 @@ import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
 import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 import { RecpagClassificacaoPage } from "../Pages/RecpagClassificao/pages";
 import { RecpagDocumentoTipoPage } from "../Pages/RecpagDocumentoTipos/pages";
+import { PessoaGrupoPage } from "../Pages/PessoaGrupos/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -108,16 +109,18 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: CentroCustosPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Estados Civis",
               key: "estado-civis",
               permission: "estado_civis_findAll",
               component: EstadoCivilPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Grupos de pessoas",
               key: "pessoa-grupos",
               permission: "pessoa_grupos_findAll",
-              component: CentroCustosPage,
+              component: PessoaGrupoPage,
             },
             {
               icon: UserRoundPlus,
