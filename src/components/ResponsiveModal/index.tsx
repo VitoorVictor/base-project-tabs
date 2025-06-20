@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
+import clsx from "clsx";
 
 interface ResponsiveModalProps {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ interface ResponsiveModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   showCloseButton?: boolean;
+  className?: string;
 }
 
 export function ResponsiveModal({
@@ -41,6 +43,7 @@ export function ResponsiveModal({
   open,
   onOpenChange,
   showCloseButton = true,
+  className,
 }: ResponsiveModalProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const isMobile = useIsMobile();
@@ -59,7 +62,7 @@ export function ResponsiveModal({
               <DrawerDescription>{description}</DrawerDescription>
             )}
           </DrawerHeader>
-          <div className="px-4">{children}</div>
+          <div className={clsx("p-4", className)}>{children}</div>
           {showCloseButton && (
             <DrawerFooter className="pt-2">
               <DrawerClose asChild>
@@ -76,7 +79,7 @@ export function ResponsiveModal({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         showCloseButton={false}
-        className="sm:max-w-[425px]"
+        className={clsx("sm:max-w-[425px]", className)}
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>

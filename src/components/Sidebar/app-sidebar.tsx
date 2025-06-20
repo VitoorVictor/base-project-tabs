@@ -35,6 +35,7 @@ import { RecpagClassificacaoPage } from "../Pages/RecpagClassificao/pages";
 import { RecpagDocumentoTipoPage } from "../Pages/RecpagDocumentoTipos/pages";
 import { PessoaGrupoPage } from "../Pages/PessoaGrupos/pages";
 import { PlanoContaPage } from "../Pages/PlanoContas/pages";
+import { PessoaPage } from "../Pages/Pessoas/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -105,10 +106,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           icon: UserRoundPlus,
           items: [
             {
-              title: "Clientes e Fornecedores",
+              icon: UserRoundPlus,
+              title: "Pessoas",
               key: "pessoas",
               permission: "pessoas_findAll",
-              component: CentroCustosPage,
+              component: PessoaPage,
             },
             {
               icon: UserRoundPlus,

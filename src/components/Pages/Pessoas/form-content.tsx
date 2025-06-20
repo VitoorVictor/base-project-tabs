@@ -5,17 +5,18 @@ import type React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormSchema } from "./schema";
-import { CustomSwitch } from "@/components/CustomInputs/custom-switch";
 import { FooterModal } from "@/components/FooterModal";
-import {
-  useCentroCusto,
-  useCreateCentroCusto,
-  useUpdateCentroCusto,
-} from "@/hooks/tanstack/useCentroCusto";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { handleApiError } from "@/utils/handleApiError";
 import { Button } from "@/components/ui/button";
+import {
+  useCreatePessoa,
+  usePessoa,
+  useUpdatePessoa,
+} from "@/hooks/tanstack/usePessoa";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabCadastro } from "./tabs/tab-cadastro";
 
 interface FormContentProps {
   // onSubmit?: () => void;
@@ -31,43 +32,50 @@ export function FormContent({
 }: FormContentProps) {
   const isUpdate = Boolean(id);
   const [loading, setLoading] = useState(false);
-  const { data, isLoading, isError } = useCentroCusto(id!, isUpdate);
-  const createCentroCusto = useCreateCentroCusto();
-  const updateCentroCusto = useUpdateCentroCusto();
+  const { data, isLoading, isError } = usePessoa(id!, isUpdate);
+  const createPessoa = useCreatePessoa();
+  const updatePessoa = useUpdatePessoa();
 
+  // const form = useForm<FormSchema>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     descricao: "",
+  //   },
+  // });
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      descricao: "",
-      ativo: true,
+      dataCadastro: new Date().toISOString().split("T")[0],
+      cidade: {},
+      cpfCnpj: "",
     },
   });
+
   const { handleSubmit, reset } = form;
 
-  useEffect(() => {
-    if (data) {
-      reset(data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     reset(data);
+  //   }
+  // }, [data]);
 
   const onSubmitForm = async (values: FormSchema) => {
     setLoading(true);
     try {
       const res = isUpdate
-        ? await updateCentroCusto.mutateAsync({ id: "0", data: values })
-        : await createCentroCusto.mutateAsync(values);
+        ? await updatePessoa.mutateAsync({ id: id!, data: values })
+        : await createPessoa.mutateAsync(values);
       if (res && res.error === "") {
         toast.success(
           res.message ||
-            `Sucesso ao ${isUpdate ? "alterar" : "cadastrar"} centro de custo`
+            `Sucesso ao ${isUpdate ? "alterar" : "cadastrar"} pessoa`
         );
         onClose();
       }
     } catch (e) {
       const { message } = handleApiError(e);
       toast.error(
-        message ||
-          `Erro ao ${isUpdate ? "alterar" : "cadastrar"} centro de custo`
+        message || `Erro ao ${isUpdate ? "alterar" : "cadastrar"} pessoa`
       );
     } finally {
       setLoading(false);
@@ -77,24 +85,19 @@ export function FormContent({
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmitForm)} className="grid gap-4 py-4">
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="Descrição"
-              name="descricao"
-              className="h-8"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <CustomSwitch
-            label={"Está Ativo?"}
-            name="ativo"
-            className="mx-auto mt-2"
-            loading={isLoading}
-            disabled={isDetails}
-          />
-        </div>
+        <Tabs defaultValue="cadastro" className="max-w-[716px] overflow-hidden">
+          <TabsList
+            className={`grid w-full border mb-5 ${
+              isUpdate ? "grid-cols-4" : "grid-cols-3"
+            }`}
+          >
+            <TabsTrigger value="cadastro">Cadastro</TabsTrigger>
+            <TabsTrigger value="fiscal">Fiscal</TabsTrigger>
+            <TabsTrigger value="vendas">Vendas</TabsTrigger>
+            {isUpdate && <TabsTrigger value="anexos">Anexos</TabsTrigger>}
+          </TabsList>
+          <TabCadastro isDetails={isDetails} isLoading={isLoading} />
+        </Tabs>
         {isDetails ? (
           <div className="flex gap-2 justify-end mt-4">
             <Button type="button" variant="outline" onClick={onClose}>

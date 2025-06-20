@@ -19,13 +19,10 @@ import { useFilterStore } from "@/store/filterStore";
 import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
-import {
-  useDeletePessoaGrupo,
-  usePessoaGrupos,
-} from "@/hooks/tanstack/usePessoaGrupo";
-import { IPessoaGrupo } from "@/interfaces/pessoa-grupo";
+import { useDeletePessoa, usePessoas } from "@/hooks/tanstack/usePessoa";
+import { IPessoa } from "@/interfaces/pessoa";
 
-export function PessoaGrupoPage() {
+export function PessoaPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
@@ -56,14 +53,14 @@ export function PessoaGrupoPage() {
 
   const isCreate = !id;
 
-  const deletePessoaGrupo = useDeletePessoaGrupo();
+  const deletePessoa = useDeletePessoa();
   const {
     data,
     isLoading,
     isError,
     error: e,
     refetch,
-  } = usePessoaGrupos({
+  } = usePessoas({
     order,
     type,
     page,
@@ -73,55 +70,45 @@ export function PessoaGrupoPage() {
   const deleteItem = async (password: string) => {
     try {
       if (!id) return;
-      const res = await deletePessoaGrupo.mutateAsync({ id, password });
+      const res = await deletePessoa.mutateAsync({ id, password });
       if (res && res.error === "") {
         setShowDialog(false);
-        toast.success(
-          res.message || "Exclusão de grupo de pessoas realizada com êxito"
-        );
+        toast.success(res.message || "Exclusão de pessoa realizada com êxito");
       }
     } catch (e) {
       const { message } = handleApiError(e);
-      toast.error(message || "Erro ao excluír grupo de pessoas");
+      toast.error(message || "Erro ao excluír pessoa");
     }
   };
 
   const addItem = () => {
-    if (!hasPermission("pessoa_grupos_create")) {
-      toast.warning(
-        messageToastHelper.accessDenied("o cadastro de grupo de pessoas")
-      );
+    if (!hasPermission("pessoas_create")) {
+      toast.warning(messageToastHelper.accessDenied("o cadastro de pessoa"));
       return;
     }
     setShowModal(true);
   };
 
-  const actions: TableActions<IPessoaGrupo> = {
+  const actions: TableActions<IPessoa> = {
     onUpdate: (id) => {
-      if (!hasPermission("pessoa_grupos_update")) {
-        toast.warning(
-          messageToastHelper.accessDenied("a alteração de grupo de pessoas")
-        );
+      if (!hasPermission("pessoas_update")) {
+        toast.warning(messageToastHelper.accessDenied("a alteração de pessoa"));
         return;
       }
       setShowModal(true);
       setId(id);
     },
     onDelete: (id) => {
-      if (!hasPermission("pessoa_grupos_delete")) {
-        toast.warning(
-          messageToastHelper.accessDenied("a exclusão de grupo de pessoas")
-        );
+      if (!hasPermission("pessoas_delete")) {
+        toast.warning(messageToastHelper.accessDenied("a exclusão de pessoa"));
         return;
       }
       setShowDialog(true);
       setId(id);
     },
     onDetails: (id) => {
-      if (!hasPermission("pessoa_grupos_findOne")) {
-        toast.warning(
-          messageToastHelper.accessDenied("o detalhes de grupo de pessoas")
-        );
+      if (!hasPermission("pessoas_findOne")) {
+        toast.warning(messageToastHelper.accessDenied("o detalhes de pessoa"));
         return;
       }
       setShowDetails(true);
@@ -164,18 +151,18 @@ export function PessoaGrupoPage() {
   return (
     <>
       <div className="space-y-2 bg-background p-4 h-full flex flex-col">
-        <CustomHeader title="Grupos de Pessoas" />
+        <CustomHeader title="Pessoas" />
         <div className="flex items-center justify-between">
           <div className="max-w-[400px] w-full">
             <SearchBar
-              placeholder="Buscar por descrição..."
+              placeholder="Buscar por código, razão social, fantasia e CPF/CNPJ..."
               search={search}
               onSubmit={searchingItem}
             />
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Grupo de Pessoas</span>
+            <span className="hidden md:inline">Nova Pessoa</span>
           </Button>
         </div>
         <div className="h-full">
@@ -204,19 +191,18 @@ export function PessoaGrupoPage() {
         )}
       </div>
       <ResponsiveModal
-        title={
-          isCreate ? "Novo grupo de pessoas" : "Atualizar grupo de pessoas"
-        }
+        title={isCreate ? "Nova pessoa" : "Atualizar pessoa"}
         description={
           isCreate
-            ? "Preencha os dados do grupo de pessoas e clique em salvar."
-            : "Atualize os dados do grupo de pessoas e clique em salvar."
+            ? "Preencha os dados de pessoa e clique em salvar."
+            : "Atualize os dados de pessoa e clique em salvar."
         }
         open={showModal || showDetails}
         onOpenChange={(open) => {
           setShowModal(open);
           setShowDetails(open);
         }}
+        className="w-full sm:max-w-[716px] max-h-[95%] overflow-auto custom-scrollbar bg-background-alt"
       >
         <FormContent
           onClose={() => {

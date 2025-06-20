@@ -148,14 +148,14 @@ export default function CustomTable<T>({
         }
       >
         <TableHeader className="bg-background-alt text-accent-foreground rounded-lg">
-          <TableRow>
+          <TableRow className="h-[clamp(2rem,2.4vw,8rem)]">
             {columns.map((col) => {
               const isActive = String(col.key) === order;
               return (
                 <TableHead
                   key={String(col.key)}
                   className={clsx(
-                    "h-9 text-left font-medium text-label",
+                    "text-left font-medium text-label",
                     col.headerClassName
                   )}
                 >
@@ -186,7 +186,7 @@ export default function CustomTable<T>({
               );
             })}
             {dropdowns && (
-              <TableHead className="h-9 text-center font-medium"></TableHead>
+              <TableHead className="text-center font-medium"></TableHead>
             )}
           </TableRow>
         </TableHeader>
@@ -196,7 +196,11 @@ export default function CustomTable<T>({
               return (
                 <TableRow
                   key={index}
-                  className={index % 2 ? "bg-background-alt" : "bg-white"}
+                  className={
+                    index % 2
+                      ? "bg-background-alt h-[clamp(2rem,2.4vw,8rem)]"
+                      : "bg-white h-[clamp(2rem,2.4vw,8rem)]"
+                  }
                 >
                   {columns.map((col) => (
                     <TableCell
