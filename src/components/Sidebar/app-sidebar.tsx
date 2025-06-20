@@ -31,6 +31,7 @@ import { ContaPage } from "../Pages/Contas/pages";
 import { PessoaSituacaoPage } from "../Pages/PessoaSituacoes/pages";
 import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
 import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
+import { RecpagClassificacaoPage } from "../Pages/RecpagClassificao/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -67,10 +68,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: CentroCustosPage,
             },
             {
+              icon: HandCoins,
               title: "Classificações de Rec./Pag.",
               key: "recpag-classificacoes",
               permission: "recpag_classificacoes_findAll",
-              component: CentroCustosPage,
+              component: RecpagClassificacaoPage,
             },
             {
               icon: HandCoins,
