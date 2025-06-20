@@ -1,0 +1,31 @@
+export interface IConta {
+  id: number;
+  descricao: string;
+  disponivelBoleto: boolean;
+  tipo: number;
+  ativo: boolean;
+  bancoBoletoHomologadoId: number | null;
+  boletoAgencia: string | null;
+  boletoAgenciaDv: string | null;
+  boletoConta: string | null;
+  boletoContaDv: string | null;
+  boletoCodigoCedente: string | null;
+  boletoQtdeDiasProtesto: number;
+  boletoPercentualJuros: number;
+  boletoPercentualMulta: number;
+  boletoInstrucao: string | null;
+  apiClientId: string | null;
+  apiClientSecret: string | null;
+  apiKeyUser: string | null;
+  apiScope: string | null;
+  apiCertificadoCrt: string | null;
+  apiCertificadoKey: string | null;
+  apiAmbiente: string | null;
+  micrologInclusao: string;
+  micrologAlteracao: string | null;
+  micrologExclusao: string | null;
+  secureId: string;
+  createdAt: string;
+  updatedAt: string | null;
+  deletedAt: string | null;
+}

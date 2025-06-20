@@ -26,6 +26,7 @@ import { CentroCustosPage } from "../Pages/CentroCustos/pages";
 import { MarcaPage } from "../Pages/Marcas/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
 import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
+import { ContaPage } from "../Pages/Contas/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -68,10 +69,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: CentroCustosPage,
             },
             {
+              icon: HandCoins,
               title: "Contas Correntes/Caixa",
               key: "contas",
               permission: "contas_findAll",
-              component: CentroCustosPage,
+              component: ContaPage,
             },
             {
               title: "Formas de Pagamentos",
