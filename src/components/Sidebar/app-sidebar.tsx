@@ -25,6 +25,7 @@ import { DashboardContent } from "../Pages/Dashboard/dashboard-pages";
 import { CentroCustosContent } from "../Pages/CentroCusto/pages";
 import { MarcaPage } from "../Pages/Marca/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
+import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -109,10 +110,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: CentroCustosContent,
             },
             {
+              icon: UserRoundPlus,
               title: "Origens",
               key: "pessoa-origens",
               permission: "pessoa_origens_findAll",
-              component: CentroCustosContent,
+              component: PessoaOrigemPage,
             },
             {
               title: "Situações",
