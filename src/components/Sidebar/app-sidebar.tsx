@@ -32,6 +32,7 @@ import { PessoaSituacaoPage } from "../Pages/PessoaSituacoes/pages";
 import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
 import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 import { RecpagClassificacaoPage } from "../Pages/RecpagClassificao/pages";
+import { RecpagDocumentoTipoPage } from "../Pages/RecpagDocumentoTipos/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -55,10 +56,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           icon: HandCoins,
           items: [
             {
+              icon: HandCoins,
               title: "Tipo de Rec./Pag.",
               key: "recpag-documento-tipos",
               permission: "recpag_documento_tipos_findAll",
-              component: CentroCustosPage,
+              component: RecpagDocumentoTipoPage,
             },
             {
               icon: HandCoins,
