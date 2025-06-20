@@ -27,6 +27,7 @@ import { MarcaPage } from "../Pages/Marcas/pages";
 import { GrupoPage } from "../Pages/Grupos/pages";
 import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
 import { ContaPage } from "../Pages/Contas/pages";
+import { PessoaSituacaoPage } from "../Pages/PessoaSituacao/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -119,10 +120,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: PessoaOrigemPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Situações",
               key: "pessoa-situacoes",
               permission: "pessoa_situacoes_findAll",
-              component: CentroCustosPage,
+              component: PessoaSituacaoPage,
             },
             {
               title: "Tipos de Contatos",
