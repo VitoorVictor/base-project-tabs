@@ -29,6 +29,7 @@ import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
 import { ContaPage } from "../Pages/Contas/pages";
 import { PessoaSituacaoPage } from "../Pages/PessoaSituacao/pages";
 import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
+import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -135,9 +136,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: PessoaTipoContatoPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Tipos de Endereços",
               key: "pessoa-tipo-enderecos",
               permission: "pessoa_tipo_enderecos_findAll",
+              component: PessoaTipoEnderecoPage,
             },
           ],
         },
