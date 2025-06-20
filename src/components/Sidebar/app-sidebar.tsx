@@ -28,6 +28,7 @@ import { GrupoPage } from "../Pages/Grupos/pages";
 import { PessoaOrigemPage } from "../Pages/PessoaOrigens/pages";
 import { ContaPage } from "../Pages/Contas/pages";
 import { PessoaSituacaoPage } from "../Pages/PessoaSituacao/pages";
+import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -127,9 +128,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: PessoaSituacaoPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Tipos de Contatos",
               key: "pessoa-tipo-contatos",
               permission: "pessoa_tipo_contatos_findAll",
+              component: PessoaTipoContatoPage,
             },
             {
               title: "Tipos de Endereços",
