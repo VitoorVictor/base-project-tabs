@@ -162,7 +162,7 @@ export function MarcaPage() {
           </div>
           <Button onClick={addItem} className="h-8 flex items-center">
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
-            <span className="hidden md:inline">Novo Marca</span>
+            <span className="hidden md:inline">Nova Marca</span>
           </Button>
         </div>
         <div className="h-full">
@@ -191,7 +191,7 @@ export function MarcaPage() {
         )}
       </div>
       <ResponsiveModal
-        title={isCreate ? "Novo marca" : "Atualizar marca"}
+        title={isCreate ? "Nova marca" : "Atualizar marca"}
         description={
           isCreate
             ? "Preencha os dados do tipo do endereço e clique em salvar."

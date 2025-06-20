@@ -25,7 +25,7 @@ import { usePermissionStore } from "@/store/permissionStore";
 import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
 
-export function CentroCustosContent() {
+export function CentroCustosPage() {
   const { activeKey } = useTabStore();
   const { hasPermission } = usePermissionStore();
   const { filters, setFilters } = useFilterStore();
