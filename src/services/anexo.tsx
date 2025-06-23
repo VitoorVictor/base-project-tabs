@@ -1,4 +1,4 @@
-import { IAnexo } from "@/interfaces/anexos";
+import { IAnexo } from "@/interfaces/anexo";
 import { api } from "./api";
 import { IResponseFetch } from "@/interfaces/comum";
 
@@ -12,9 +12,9 @@ export async function fetchAnexoAll(
 
 export async function createAnexo(
   tipoAnexo: string,
-  body: any
+  formData: FormData
 ): Promise<IResponseFetch<any>> {
-  const { data } = await api.post(`/${tipoAnexo}/anexo`, body, {
+  const { data } = await api.post(`/${tipoAnexo}/anexo`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

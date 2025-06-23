@@ -369,4 +369,53 @@ export const formSchema = z
     }
   );
 
+const allowedTypes = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "application/msword",
+  "text/plain",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+];
+
+export const formSchemaAnexo = z.object({
+  titulo: z
+    .string({
+      required_error: "O título é obrigatório.",
+    })
+    .min(1, "O título é obrigatório."),
+  vinculoId: z.number(),
+
+  observacao: z
+    .string()
+    .max(500, "A observação deve ter no máximo 500 caracteres.")
+    .nullable()
+    .optional(),
+  file: z
+    .array(z.instanceof(File))
+    .min(1, "O arquivo é obrigatório no anexo.")
+    .refine(
+      (files) => {
+        return allowedTypes.includes(files[0].type);
+      },
+      {
+        message:
+          "O arquivo deve ser um PDF, JPG, JPEG, PNG, DOC, TXT, XLS ou XLSX.",
+      }
+    )
+    .refine(
+      (files) => {
+        return (
+          files[0].size <=
+          Number(process.env.NEXT_PUBLIC_MAX_FILE_SIZE_MB) * 1024 * 1024
+        ); // 2MB
+      },
+      {
+        message: `O tamanho do arquivo deve ser no máximo ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE_MB}.`,
+      }
+    ),
+});
+
 export type FormSchema = z.infer<typeof formSchema>;
+export type FormSchemaAnexo = z.infer<typeof formSchemaAnexo>;
