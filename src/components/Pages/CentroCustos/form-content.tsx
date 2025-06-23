@@ -54,7 +54,7 @@ export function FormContent({
     setLoading(true);
     try {
       const res = isUpdate
-        ? await updateCentroCusto.mutateAsync({ id: id!, data: values })
+        ? await updateCentroCusto.mutateAsync({ id: "0", data: values })
         : await createCentroCusto.mutateAsync(values);
       if (res && res.error === "") {
         toast.success(

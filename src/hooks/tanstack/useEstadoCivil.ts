@@ -17,7 +17,7 @@ import { IEstadoCivil } from "@/interfaces/estado-civil";
 
 const ESTADO_CIVIL_KEY = "estado-civil";
 
-export function useEstadoCivils(
+export function useEstadoCivis(
   filters: IFilterQry,
   options?: UseQueryOptions<IResponse<IEstadoCivil>>
 ) {

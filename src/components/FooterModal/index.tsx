@@ -36,7 +36,7 @@ export function FooterModal({
       <div className="flex gap-2 justify-end mt-4">
         <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
           <DialogTrigger asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" className="cursor-pointer">
               {labelCancel ?? "Cancelar"}
             </Button>
           </DialogTrigger>
@@ -50,11 +50,16 @@ export function FooterModal({
             <DialogFooter>
               <Button
                 variant="ghost"
+                className="cursor-pointer"
                 onClick={() => setShowConfirmDialog(false)}
               >
                 Voltar
               </Button>
-              <Button variant="destructive" onClick={handleConfirm}>
+              <Button
+                variant="destructive"
+                className="cursor-pointer"
+                onClick={handleConfirm}
+              >
                 Sim, cancelar
               </Button>
             </DialogFooter>
@@ -62,7 +67,7 @@ export function FooterModal({
         </Dialog>
 
         {/* <Button type="submit">{labelConfirm ?? "Salvar"}</Button> */}
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" className="cursor-pointer" disabled={isLoading}>
           {isLoading ? (
             <>
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />

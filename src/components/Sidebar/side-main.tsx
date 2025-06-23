@@ -35,7 +35,6 @@ export function SideMain({ items }: { items: SidebarItem[] }) {
   const handleTabClick = (item: SidebarItem) => {
     if (!item.key || !item.component) return;
     setOpen(false);
-    console.log(item.component);
     openTab({
       icon: item.icon,
       key: item.key,

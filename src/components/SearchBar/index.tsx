@@ -60,7 +60,7 @@ export default function SearchBar({
           type="submit"
           variant="ghost"
           size="icon"
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-12 rounded-l-none hover:bg-primary/10"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-8 rounded-l-none hover:bg-primary/10 cursor-pointer"
         >
           <Search className="h-4 w-4" />
         </Button>

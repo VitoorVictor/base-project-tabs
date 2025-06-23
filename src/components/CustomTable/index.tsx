@@ -147,15 +147,15 @@ export default function CustomTable<T>({
             : undefined
         }
       >
-        <TableHeader className="bg-background-alt text-accent-foreground rounded-lg">
-          <TableRow>
+        <TableHeader className="bg-background-overlay text-accent-foreground rounded-lg">
+          <TableRow className="h-[clamp(2rem,2.4vw,8rem)]">
             {columns.map((col) => {
               const isActive = String(col.key) === order;
               return (
                 <TableHead
                   key={String(col.key)}
                   className={clsx(
-                    "h-9 text-left font-medium text-label",
+                    "text-left font-medium text-label",
                     col.headerClassName
                   )}
                 >
@@ -186,7 +186,7 @@ export default function CustomTable<T>({
               );
             })}
             {dropdowns && (
-              <TableHead className="h-9 text-center font-medium"></TableHead>
+              <TableHead className="text-center font-medium"></TableHead>
             )}
           </TableRow>
         </TableHeader>
@@ -196,7 +196,11 @@ export default function CustomTable<T>({
               return (
                 <TableRow
                   key={index}
-                  className={index % 2 ? "bg-background-alt" : "bg-white"}
+                  className={
+                    index % 2
+                      ? "bg-background-overlay hover:bg-zinc-100"
+                      : "bg-white hover:bg-zinc-100"
+                  }
                 >
                   {columns.map((col) => (
                     <TableCell
@@ -217,7 +221,10 @@ export default function CustomTable<T>({
                       <div className="text-center">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 p-0">
+                            <Button
+                              variant="ghost"
+                              className="h-8 p-0 cursor-pointer"
+                            >
                               <span className="sr-only">Open menu</span>
                               <MoreHorizontal className="h-4 w-4 text-label" />
                             </Button>

@@ -33,6 +33,10 @@ import { PessoaSituacaoPage } from "../Pages/PessoaSituacoes/pages";
 import { PessoaTipoContatoPage } from "../Pages/PessoaTipoContatos/pages";
 import { PessoaTipoEnderecoPage } from "../Pages/PessoaTipoEnderecos/pages";
 import { RecpagClassificacaoPage } from "../Pages/RecpagClassificao/pages";
+import { RecpagDocumentoTipoPage } from "../Pages/RecpagDocumentoTipos/pages";
+import { PessoaGrupoPage } from "../Pages/PessoaGrupos/pages";
+import { PlanoContaPage } from "../Pages/PlanoContas/pages";
+import { PessoaPage } from "../Pages/Pessoas/pages";
 import { Button } from "../ui/button";
 import { logoutAction } from "@/actions/auth";
 
@@ -58,10 +62,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           icon: HandCoins,
           items: [
             {
+              icon: HandCoins,
               title: "Tipo de Rec./Pag.",
               key: "recpag-documento-tipos",
               permission: "recpag_documento_tipos_findAll",
-              component: CentroCustosPage,
+              component: RecpagDocumentoTipoPage,
             },
             {
               icon: HandCoins,
@@ -91,10 +96,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
               component: CentroCustosPage,
             },
             {
+              icon: HandCoins,
               title: "Plano de Contas",
               key: "plano-contas",
               permission: "plano_contas_findAll",
-              component: CentroCustosPage,
+              component: PlanoContaPage,
             },
           ],
         },
@@ -103,22 +109,25 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           icon: UserRoundPlus,
           items: [
             {
-              title: "Clientes e Fornecedores",
+              icon: UserRoundPlus,
+              title: "Pessoas",
               key: "pessoas",
               permission: "pessoas_findAll",
-              component: CentroCustosPage,
+              component: PessoaPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Estados Civis",
               key: "estado-civis",
               permission: "estado_civis_findAll",
               component: EstadoCivilPage,
             },
             {
+              icon: UserRoundPlus,
               title: "Grupos de pessoas",
               key: "pessoa-grupos",
               permission: "pessoa_grupos_findAll",
-              component: CentroCustosPage,
+              component: PessoaGrupoPage,
             },
             {
               icon: UserRoundPlus,

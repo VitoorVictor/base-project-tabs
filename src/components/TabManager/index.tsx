@@ -37,44 +37,40 @@ export function TabManager({ children }: { children: ReactNode }) {
       >
         {/* Navegação das abas */}
         <ScrollArea className="border-b-2 border-primary bg-background-overlay">
-          <TabsList className="mx-1 mt-2 text-foreground rounded-none before:bg-border bg-transparent relative h-8 p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px">
-            {tabs.map((tab) => (
-              <div key={tab.key} className="relative">
-                <TabsTrigger
-                  value={tab.key}
-                  className={`pl-4 bg-background overflow-hidden rounded-b-none border-slate-300 border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:bg-primary data-[state=active]:text-background text-xs
+          <div className="overflow-hidden">
+            <TabsList className="mx-1 mt-2 text-foreground rounded-none before:bg-border bg-transparent relative h-8 p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px">
+              {tabs.map((tab) => (
+                <div key={tab.key} className="relative">
+                  <TabsTrigger
+                    value={tab.key}
+                    className={`pl-4 bg-background overflow-hidden rounded-b-none border-slate-300 border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:bg-primary data-[state=active]:text-background text-xs
                       ${tab.key === "dashboard" ? "pr-4" : "pr-8"}`}
-                >
-                  {tab.icon && (
-                    <tab.icon
-                      className="-ms-0.5 me-1.5"
-                      size={16}
-                      aria-hidden="true"
-                    />
-                  )}
-                  {tab.title}
-                  {/* {tab.badge && (
+                  >
+                    {tab.icon && <tab.icon size={16} aria-hidden="true" />}
+                    {tab.title}
+                    {/* {tab.badge && (
                     <Badge className="bg-primary/15 ms-1.5 min-w-5 px-1" variant="secondary">
                       {tab.badge}
                     </Badge>
                   )} */}
-                </TabsTrigger>
-                {tab.key !== "dashboard" && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 h-5 w-4 p-0 hover:bg-destructive hover:text-white text-white rounded-full cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      closeTab(tab.key);
-                    }}
-                  >
-                    <X />
-                  </Button>
-                )}
-              </div>
-            ))}
-          </TabsList>
+                  </TabsTrigger>
+                  {tab.key !== "dashboard" && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 h-5 w-4 p-0 hover:bg-destructive hover:text-white text-white rounded-full cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        closeTab(tab.key);
+                      }}
+                    >
+                      <X />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </TabsList>
+          </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
 

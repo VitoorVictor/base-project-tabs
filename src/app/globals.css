@@ -226,6 +226,16 @@
     font-weight: 400;
   }
 
+  /* :root {
+    --spacing: 0.3rem;
+  }
+
+  @media (max-width: 1400px) {
+    :root {
+      --spacing: 0.23rem;
+    }
+  } */
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px; /* Largura da scrollbar */
     height: 6px; /* Altura da scrollbar para scroll horizontal */
