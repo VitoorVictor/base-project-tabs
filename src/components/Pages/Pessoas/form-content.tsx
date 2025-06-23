@@ -174,7 +174,6 @@ export function FormContent({
     setLoading(true);
     const normalizedValues = normalizeValues(values);
     try {
-      console.log("normalizedValues:", normalizedValues);
       const res = isUpdate
         ? await updatePessoa.mutateAsync({ id: id!, data: normalizedValues })
         : await createPessoa.mutateAsync(normalizedValues);
