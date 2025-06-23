@@ -52,7 +52,7 @@ const validaCNPJ = (cnpj: string) => {
 
 export const formSchema = z
   .object({
-    dataCadastro: z.string().nonempty("Data do cadastro é obrigatória"),
+    dataCadastro: z.string().nullable(),
     pessoaSituacao: z
       .object(
         {

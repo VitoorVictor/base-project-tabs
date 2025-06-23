@@ -20,6 +20,9 @@ import { TabCadastro } from "./tabs/tab-cadastro";
 import { TabFiscal } from "./tabs/tab-fiscal";
 import { TabVendas } from "./tabs/tab-vendas";
 import { TabAnexos } from "./tabs/tab-anexos";
+import { DeleteDialog } from "@/components/DeleteDialog";
+import { useAnexoActions } from "@/hooks/useAnexo";
+import { deleteAnexo } from "@/services/anexo";
 
 interface FormContentProps {
   // onSubmit?: () => void;
@@ -34,7 +37,12 @@ export function FormContent({
   id,
 }: FormContentProps) {
   const isUpdate = Boolean(id);
+
   const [loading, setLoading] = useState(false);
+  const [anexoId, setAnexoId] = useState<null | string>(null);
+
+  const { removeAnexo } = useAnexoActions();
+
   const { data, isLoading, isError } = usePessoa(id!, isUpdate);
   const createPessoa = useCreatePessoa();
   const updatePessoa = useUpdatePessoa();
@@ -87,6 +95,20 @@ export function FormContent({
       reset(data);
     }
   }, [data]);
+
+  const deleteAnexo = async (password: string) => {
+    if (!anexoId) return;
+    try {
+      const res = await removeAnexo("pessoas", anexoId, password);
+      if (res) {
+        toast.success(res.message || "Anexo deletado com êxito");
+        setAnexoId(null);
+      }
+    } catch (e) {
+      const { message } = handleApiError(e);
+      toast.error(message || "Erro ao deletar anexo");
+    }
+  };
 
   const normalizeValues = (values: FormSchema) => {
     const result: Record<string, any> = {};
@@ -174,36 +196,50 @@ export function FormContent({
   };
 
   return (
-    <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmitForm)} className="grid gap-4 py-4">
-        <Tabs defaultValue="cadastro" className="max-w-[716px] overflow-hidden">
-          <TabsList
-            className={`grid w-full border mb-5 ${
-              isUpdate ? "grid-cols-4" : "grid-cols-3"
-            }`}
+    <>
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(onSubmitForm)} className="grid gap-4 py-4">
+          <Tabs
+            defaultValue="cadastro"
+            className="max-w-[716px] overflow-hidden"
           >
-            <TabsTrigger value="cadastro">Cadastro</TabsTrigger>
-            <TabsTrigger value="fiscal">Fiscal</TabsTrigger>
-            <TabsTrigger value="vendas">Vendas</TabsTrigger>
-            {isUpdate && <TabsTrigger value="anexos">Anexos</TabsTrigger>}
-          </TabsList>
-          <TabCadastro isDetails={isDetails} isLoading={isLoading} />
-          <TabFiscal isDetails={isDetails} isLoading={isLoading} />
-          <TabVendas isDetails={isDetails} isLoading={isLoading} />
-          {isUpdate && (
-            <TabAnexos isDetails={isDetails} isLoading={isLoading} />
+            <TabsList
+              className={`grid w-full border mb-5 ${
+                isUpdate ? "grid-cols-4" : "grid-cols-3"
+              }`}
+            >
+              <TabsTrigger value="cadastro">Cadastro</TabsTrigger>
+              <TabsTrigger value="fiscal">Fiscal</TabsTrigger>
+              <TabsTrigger value="vendas">Vendas</TabsTrigger>
+              {isUpdate && <TabsTrigger value="anexos">Anexos</TabsTrigger>}
+            </TabsList>
+            <TabCadastro isDetails={isDetails} isLoading={isLoading} />
+            <TabFiscal isDetails={isDetails} isLoading={isLoading} />
+            <TabVendas isDetails={isDetails} isLoading={isLoading} />
+            {isUpdate && (
+              <TabAnexos
+                isDetails={isDetails}
+                isLoading={isLoading}
+                onDelete={setAnexoId}
+              />
+            )}
+          </Tabs>
+          {isDetails ? (
+            <div className="flex gap-2 justify-end mt-4">
+              <Button type="button" variant="outline" onClick={onClose}>
+                Voltar
+              </Button>
+            </div>
+          ) : (
+            <FooterModal onClose={onClose!} isLoading={loading} />
           )}
-        </Tabs>
-        {isDetails ? (
-          <div className="flex gap-2 justify-end mt-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Voltar
-            </Button>
-          </div>
-        ) : (
-          <FooterModal onClose={onClose!} isLoading={loading} />
-        )}
-      </form>
-    </FormProvider>
+        </form>
+      </FormProvider>
+      <DeleteDialog
+        open={Boolean(anexoId)}
+        onClose={() => setAnexoId(null)}
+        onConfirm={deleteAnexo}
+      />
+    </>
   );
 }

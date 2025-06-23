@@ -32,14 +32,10 @@ export function FormContentAnexo({
   });
 
   const onSubmitForm = async (values: FormSchemaAnexo) => {
-    console.log("aqui");
     setLoading(true);
     await onSubmit(values);
     setLoading(false);
   };
-  console.log(id);
-  console.log(form.formState.errors);
-
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmitForm)} className="grid gap-4">

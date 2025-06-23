@@ -1,4 +1,10 @@
-import { fetchAnexoAll, createAnexo, deleteAnexo } from "@/services/anexo";
+import {
+  fetchAnexoAll,
+  createAnexo,
+  deleteAnexo,
+  getAssinatura,
+  getLinkAnexo,
+} from "@/services/anexo";
 import {
   useQuery,
   useMutation,
@@ -26,8 +32,13 @@ export function useAnexos(
 export function useCreateAnexo() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ tipoAnexo, formData }: { tipoAnexo: string; formData: FormData }) =>
-      createAnexo(tipoAnexo, formData),
+    mutationFn: ({
+      tipoAnexo,
+      formData,
+    }: {
+      tipoAnexo: string;
+      formData: FormData;
+    }) => createAnexo(tipoAnexo, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ANEXO_KEY] });
     },
@@ -49,5 +60,25 @@ export function useDeleteAnexo() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ANEXO_KEY] });
     },
+  });
+}
+
+export function useAnexoAssinatura(id: string, enabled?: boolean) {
+  return useQuery<{ assinatura: string }>({
+    enabled,
+    queryKey: [ANEXO_KEY, id],
+    queryFn: () => getAssinatura(id),
+  });
+}
+
+export function useAnexoLink(
+  id: string,
+  assinatura: string,
+  enabled?: boolean
+) {
+  return useQuery<Blob>({
+    enabled,
+    queryKey: [ANEXO_KEY, id, assinatura],
+    queryFn: () => getLinkAnexo(id, assinatura),
   });
 }

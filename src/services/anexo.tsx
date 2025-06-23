@@ -25,10 +25,30 @@ export async function createAnexo(
 export async function deleteAnexo(
   tipoAnexo: string,
   id: string,
-  body: {}
+  password: string
 ): Promise<IResponseFetch<any>> {
   const { data } = await api.delete(`/${tipoAnexo}/anexo/${id}`, {
-    data: body,
+    data: { password: password },
   });
+  return data;
+}
+
+export async function getAssinatura(
+  id: string
+): Promise<{ assinatura: string }> {
+  const { data } = await api.get(`/anexos/gera-assinatura-anexo/${id}`);
+  return data;
+}
+
+export async function getLinkAnexo(
+  id: string,
+  assinatura: string
+): Promise<Blob> {
+  const { data } = await api.get(
+    `/anexos/${id}?id=${id}&assinatura=${assinatura}`,
+    {
+      responseType: "blob",
+    }
+  );
   return data;
 }
