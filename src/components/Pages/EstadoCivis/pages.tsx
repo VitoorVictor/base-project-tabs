@@ -21,7 +21,7 @@ import { CustomError } from "@/components/CustomError";
 import { messageToastHelper } from "@/helpers/messageToastHelper";
 import {
   useDeleteEstadoCivil,
-  useEstadoCivils,
+  useEstadoCivis,
 } from "@/hooks/tanstack/useEstadoCivil";
 import { IEstadoCivil } from "@/interfaces/estado-civil";
 
@@ -63,7 +63,7 @@ export function EstadoCivilPage() {
     isError,
     error: e,
     refetch,
-  } = useEstadoCivils({
+  } = useEstadoCivis({
     order,
     type,
     page,

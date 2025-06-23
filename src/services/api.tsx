@@ -16,7 +16,7 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOGE5YzlkNC0xMDI5LTQyZjUtOTZkYi00YjliMzgyMTBkYWIiLCJlbWFpbCI6InRlc3RlQG1zMXNpc3RlbWFzLmNvbS5iciIsInR5cGUiOiJhY2Nlc3MiLCJtb2R1bG8iOjMsImlkIjoxLCJub21lIjoiVGVzdGUiLCJyYW1hbCI6IjIwMyIsImlhdCI6MTc1MDQ3NDkxOSwiZXhwIjoxNzUwNDgyMTE5fQ.ETSYyARuaSg5Ur9iRF9QSSEeiDpSWFITH0uL4qN-rWc",
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZjljOWMzMi03ZTI2LTRlYjQtODEyMS04YzJhN2RlYmI3NGUiLCJlbWFpbCI6InIyZDJAeW9kYWNvcnBzLmNvbS5iciIsInR5cGUiOiJhY2Nlc3MiLCJtb2R1bG8iOjMsImlkIjoyLCJub21lIjoiUjItRDIiLCJyYW1hbCI6bnVsbCwiaWF0IjoxNzUwNzAyMDQ2LCJleHAiOjE3NTA3MDkyNDZ9.iE0ypz-im9LR8Atfz0T_RB0Q1hal3-UR3b5UJMY87mE",
   },
 });
 

@@ -109,9 +109,7 @@ export function CustomCombobox({
                         {/* Exibir fieldLabel, mas armazenar fieldValue */}
                         <span className="flex-1 truncate text-left">
                           {field.value
-                            ? data.find(
-                                (item) => item[fieldValue] === field.value
-                              )?.[fieldLabel]
+                            ? field.value?.[fieldLabel]
                             : placeholder}
                         </span>
                         {!field.value && (
@@ -121,7 +119,7 @@ export function CustomCombobox({
 
                       {field.value && !disabled && (
                         <Button
-                          className="h-8 border border-input border-l-0 shadow-sm rounded-tl-none rounded-bl-none hover:bg-destructive hover:text-destructive-foreground"
+                          className="h-8 border border-input border-l-0 shadow-sm rounded-tl-none rounded-bl-none hover:bg-destructive hover:text-white cursor-pointer"
                           variant="outline"
                           type="button"
                           size="icon"
@@ -145,7 +143,7 @@ export function CustomCombobox({
                           placeholder={searchPlaceholder}
                           className="h-8"
                         />
-                        <CommandList>
+                        <CommandList className="custom-scrollbar">
                           <CommandEmpty>{empty}</CommandEmpty>
                           <CommandGroup>
                             {data.map((item) => (
@@ -154,9 +152,13 @@ export function CustomCombobox({
                                 value={item[fieldValue]}
                                 onSelect={() => {
                                   field.onChange(
-                                    field.value === item[fieldValue]
+                                    field.value?.[fieldValue] ===
+                                      item[fieldValue]
                                       ? null
-                                      : item[fieldValue]
+                                      : {
+                                          [fieldValue]: item[fieldValue],
+                                          [fieldLabel]: item[fieldLabel],
+                                        }
                                   );
                                   setOpen(false);
                                 }}
@@ -165,7 +167,8 @@ export function CustomCombobox({
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    field.value === item[fieldValue]
+                                    field.value?.[fieldValue] ===
+                                      item[fieldValue]
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
@@ -180,7 +183,6 @@ export function CustomCombobox({
                 </Popover>
               )}
             </FormControl>
-
             {hint && !fieldState.error && (
               <FormDescription className="text-sm text-muted-foreground">
                 {hint}

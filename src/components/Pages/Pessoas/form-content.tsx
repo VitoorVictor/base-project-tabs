@@ -17,6 +17,9 @@ import {
 } from "@/hooks/tanstack/usePessoa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabCadastro } from "./tabs/tab-cadastro";
+import { TabFiscal } from "./tabs/tab-fiscal";
+import { TabVendas } from "./tabs/tab-vendas";
+import { TabAnexos } from "./tabs/tab-anexos";
 
 interface FormContentProps {
   // onSubmit?: () => void;
@@ -36,12 +39,6 @@ export function FormContent({
   const createPessoa = useCreatePessoa();
   const updatePessoa = useUpdatePessoa();
 
-  // const form = useForm<FormSchema>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     descricao: "",
-  //   },
-  // });
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -97,6 +94,11 @@ export function FormContent({
             {isUpdate && <TabsTrigger value="anexos">Anexos</TabsTrigger>}
           </TabsList>
           <TabCadastro isDetails={isDetails} isLoading={isLoading} />
+          <TabFiscal isDetails={isDetails} isLoading={isLoading} />
+          <TabVendas isDetails={isDetails} isLoading={isLoading} />
+          {isUpdate && (
+            <TabAnexos isDetails={isDetails} isLoading={isLoading} />
+          )}
         </Tabs>
         {isDetails ? (
           <div className="flex gap-2 justify-end mt-4">

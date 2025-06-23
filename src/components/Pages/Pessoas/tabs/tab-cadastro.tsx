@@ -3,12 +3,18 @@ import { CustomInput } from "@/components/CustomInputs/custom-input";
 import { CustomInputCelTel } from "@/components/CustomInputs/custom-input-celtel";
 import { CustomInputCep } from "@/components/CustomInputs/custom-input-cep";
 import { CustomInputCpfCnpj } from "@/components/CustomInputs/custom-input-cpfcnpj";
-import { CustomInputDate } from "@/components/CustomInputs/custom-input-date";
 import { CustomSwitch } from "@/components/CustomInputs/custom-switch";
+import { CustomInputTextarea } from "@/components/CustomInputs/custpm-input-textarea";
 import { Button } from "@/components/ui/button";
 import { FormLabel, FormMessage } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TabsContent } from "@/components/ui/tabs";
+import { useEstadoCivis } from "@/hooks/tanstack/useEstadoCivil";
+import { usePessoaGrupos } from "@/hooks/tanstack/usePessoaGrupo";
+import { usePessoaOrigens } from "@/hooks/tanstack/usePessoaOrigem";
+import { usePessoaSituacoes } from "@/hooks/tanstack/usePessoaSituacao";
+import { usePessoaTipoContatos } from "@/hooks/tanstack/usePessoaTipoContato";
+import { usePessoaTipoEnderecos } from "@/hooks/tanstack/usePessoaTipoEndereco";
 import { ISearchCep, ISearchCnpj } from "@/interfaces/search";
 import { usePermissionStore } from "@/store/permissionStore";
 import { Plus, X } from "lucide-react";
@@ -22,6 +28,28 @@ interface TabCadastroProps {
 
 export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
   const { hasPermission } = usePermissionStore();
+  const { data: situacao, isLoading: isLoadingSituacao } = usePessoaSituacoes(
+    {}
+  );
+  // const { data: empresa, isLoading: isLoadingEmpresa } = usePessoaEmpresas(
+  //   {}
+  // );
+
+  const { data: tipoEndereco, isLoading: isLoadingTipoEndereco } =
+    usePessoaTipoEnderecos({});
+
+  const { data: tipoContato, isLoading: isLoadingTipoContato } =
+    usePessoaTipoContatos({});
+
+  const { data: pessoaGrupos, isLoading: isLoadingGrupoPessoas } =
+    usePessoaGrupos({});
+
+  const { data: pessoaOrigem, isLoading: isLoadingPessoaOrigem } =
+    usePessoaOrigens({});
+
+  const { data: estadoCivil, isLoading: isLoadingEstadoCivil } = useEstadoCivis(
+    {}
+  );
 
   const [modal, setModal] = useState<{
     showSituacao: boolean;
@@ -96,9 +124,9 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
 
   return (
     <TabsContent value="cadastro" className="grid gap-4">
-      <div className="relative p-4 bg-background-content rounded-lg border">
+      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base bg-gradient-to-b from-background-modal to-background-content">
+          <FormLabel className="font-semibold text-base">
             Informações Cadastrais
           </FormLabel>
         </div>
@@ -107,31 +135,30 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
             label="Data do Cadastro"
             name="dataCadastro"
             type="date"
-            className="h-8"
+            className="h-8 bg-white"
             loading={isLoading}
             disabled={isDetails}
           />
           <div className="flex-1 flex items-end justify-between w-full gap-2">
-            <div className="flex-1">
-              <CustomCombobox
-                name={"pessoaSituacao"}
-                label={"Situação"}
-                loading={isLoading}
-                disabled={isDetails}
-                data={[]}
-                fieldLabel={"descricao"}
-                fieldValue={"id"}
-              />
-            </div>
+            <CustomCombobox
+              name={"pessoaSituacao"}
+              label={"Situação"}
+              loading={isLoading || isLoadingSituacao}
+              disabled={isDetails}
+              data={situacao?.items || []}
+              fieldLabel="descricao"
+              fieldValue="id"
+              containerClassName="flex-1"
+            />
             {hasPermission("pessoas_situacoes_create") &&
               !isDetails &&
               (isLoading ? (
-                <Skeleton className="h-8 w-8  mb-4 shrink-0" />
+                <Skeleton className="h-8 w-8 shrink-0" />
               ) : (
                 <Button
                   variant={"outline"}
                   type="button"
-                  className="h-8 w-8 mb-4 shrink-0"
+                  className="h-8 w-8 shrink-0"
                   onClick={() =>
                     setModal((prev) => {
                       return { ...prev, showSituacao: true };
@@ -144,77 +171,66 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           </div>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            {/* {isUpdate ? (
-              <CustomComboboxEmpresas
-                initialData={data.pessoa.empresa}
-                name={"empresaId"}
-                label={"Empresa"}
-                isLoading={isLoading}
-                disabled={isDetails}
-              />
-            ) : (
-              <CustomComboboxEmpresas
-                name={"empresaId"}
-                label={"Empresa"}
-                isLoading={isLoading}
-                initialData={data.empresa ? data.empresa : undefined}
-                disabled={isDetails}
-              />
-            )} */}
-          </div>
-          <div className="flex-1">
-            <CustomInputCpfCnpj
-              label={"CPF/CNPJ"}
-              name="cpfCnpj"
-              loading={isLoading}
-              disabled={isDetails}
-              onSetEndereco={onSetEndereco}
-            />
-          </div>
+          <CustomCombobox
+            name="empresa"
+            label={"Empresa"}
+            loading={isLoading}
+            disabled={isDetails}
+            data={[]}
+            fieldValue="id"
+            fieldLabel="razaoSocial"
+            containerClassName="flex-1"
+          />
+          <CustomInputCpfCnpj
+            label={"CPF/CNPJ"}
+            name="cpfCnpj"
+            loading={isLoading}
+            disabled={isDetails}
+            onSetEndereco={onSetEndereco}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="RG / IE"
-              name="rgIe"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInput
-              label="Orgão Emissor"
-              name="rgOrgaoEmissor"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomInput
+            label="RG / IE"
+            name="rgIe"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInput
+            label="Orgão Emissor"
+            name="rgOrgaoEmissor"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="Razão Social / Nome Completo"
-              name="razaoSocial"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInput
-              label="Nome Fantasia / Nome Social"
-              name="nomeFantasia"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomInput
+            label="Razão Social / Nome Completo"
+            name="razaoSocial"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInput
+            label="Nome Fantasia / Nome Social"
+            name="nomeFantasia"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
       </div>
-      <div className="relative p-4 bg-background-content rounded-lg border">
+      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base bg-gradient-to-b from-background-modal to-background-content">
-            Natureza
-          </FormLabel>
+          <FormLabel className="font-semibold text-base">Natureza</FormLabel>
         </div>
         <div className="px-1 flex items-center justify-between gap-2">
           <div className="text-ellipsis w-auto">
@@ -249,11 +265,9 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           <FormMessage>{formState.errors.root?.message}</FormMessage>
         )}
       </div>
-      <div className="relative p-4 bg-background-content rounded-lg border">
+      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base bg-gradient-to-b from-background-modal to-background-content">
-            Endereços
-          </FormLabel>
+          <FormLabel className="font-semibold text-base">Endereços</FormLabel>
         </div>
         <div className="flex items-center justify-between gap-2">
           <CustomInputCep
@@ -266,15 +280,16 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
               setValue("bairro", response.bairro);
               setValue("cidade", response.cidade);
             }}
+            className="h-8 bg-white"
           />
-          <div className="flex-1">
-            <CustomInput
-              label="Endereço"
-              name="endereco"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomInput
+            label="Endereço"
+            name="endereco"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex items-center justify-between gap-2">
           <CustomInput
@@ -282,46 +297,36 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
             name="numero"
             loading={isLoading}
             disabled={isDetails}
+            className="h-8 bg-white"
           />
-          <div className="flex-1">
-            <CustomInput
-              label="Bairro"
-              name="bairro"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomInput
+            label="Bairro"
+            name="bairro"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            {/* {data.pessoa?.cidade && isUpdate ? (
-              <CustomComboboxCidades
-                name="cidadeId"
-                label={"Cidade"}
-                isLoading={isLoading}
-                disabled={isDetails}
-                initialData={{
-                  ...data.pessoa.cidade,
-                  cidadeEstado: `${data.pessoa.cidade.descricao} - ${data.pessoa.cidade.estado.sigla}`,
-                }}
-              />
-            ) : (
-              <CustomComboboxCidades
-                name="cidadeId"
-                label={"Cidade"}
-                isLoading={isLoading}
-                disabled={isDetails}
-              />
-            )} */}
-          </div>
-          <div className="flex-1">
-            <CustomInput
-              label="Complemento"
-              name="complemento"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomCombobox
+            name="cidade"
+            label="Cidade"
+            loading={isLoading}
+            disabled={isDetails}
+            data={[]}
+            fieldValue="id"
+            fieldLabel="descricao"
+            containerClassName="flex-1"
+          />
+          <CustomInput
+            label="Complemento"
+            name="complemento"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex justify-start items-end gap-2">
           <FormLabel className="font-semibold text-base mt-4">
@@ -330,7 +335,7 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           {!isDetails && (
             <Button
               variant="outline"
-              className="rounded-full hover:border-primary h-4 w-4 p-3 -translate-y-0.5"
+              className="rounded-full hover:border-primary h-4 w-4 p-3 -translate-y-0.5 cursor-pointer"
               type="button"
               onClick={handleAddEndereco}
             >
@@ -341,14 +346,14 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
         <div className="flex flex-col gap-4">
           {fieldsEnderecos.map((field, index) => (
             <div
-              className="relative border border-gray-200 p-4 rounded-md grid gap-2"
+              className="relative border border-gray-200 p-4 rounded grid gap-4 bg-background-alt"
               key={field.id}
             >
-              <div className="absolute -top-3 right-2 bg-white px-2">
+              <div className="absolute -top-3 right-2 bg-transparent px-2">
                 {!isDetails && (
                   <Button
                     variant="outline"
-                    className="hover:border-red-500 rounded-full h-4 w-4 p-3 -translate-y-0.5"
+                    className="hover:border-red-500 rounded-full h-4 w-4 p-3 -translate-y-0.5 cursor-pointer"
                     type="button"
                     onClick={() => removeEndereco(index)}
                   >
@@ -356,53 +361,38 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
                   </Button>
                 )}
               </div>
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-end justify-between w-full  gap-2">
-                  <div className="flex-1 ">
-                    {/* {data.pessoa?.enderecoAuxiliar && isUpdate ? (
-                      <CustomComboboxTipoEnderecos
-                        initialData={
-                          data.pessoa.enderecoAuxiliar[index]
-                            ? data.pessoa.enderecoAuxiliar[index]
-                                .pessoaTipoEndereco
-                            : undefined
-                        }
-                        name={`enderecoAuxiliar.${index}.pessoaTipoEnderecoId`}
-                        label={"Tipo de Endereço"}
-                        isLoading={isLoading}
-                        disabled={isDetails}
-                      />
-                    ) : (
-                      <CustomComboboxTipoEnderecos
-                        name={`enderecoAuxiliar.${index}.pessoaTipoEnderecoId`}
-                        label={"Tipo de Endereço"}
-                        isLoading={isLoading}
-                        disabled={isDetails}
-                      />
-                    )} */}
-                  </div>
-                  {hasPermission("pessoa_tipo_enderecos_create") &&
-                    !isDetails &&
-                    (isLoading ? (
-                      <Skeleton className="h-8 w-8  mb-4 shrink-0" />
-                    ) : (
-                      <Button
-                        variant={"outline"}
-                        type="button"
-                        className="h-8 w-8 mb-4 shrink-0"
-                        onClick={() =>
-                          setModal((prev) => {
-                            return {
-                              ...prev,
-                              showTipoEndereco: true,
-                            };
-                          })
-                        }
-                      >
-                        <Plus />
-                      </Button>
-                    ))}
-                </div>
+              <div className="flex items-end justify-between gap-2">
+                <CustomCombobox
+                  name={`enderecoAuxiliar.${index}.pessoaTipoEndereco`}
+                  label={"Tipo de Endereço"}
+                  loading={isLoading || isLoadingTipoEndereco}
+                  disabled={isDetails}
+                  data={tipoEndereco?.items || []}
+                  fieldValue="id"
+                  fieldLabel="descricao"
+                  containerClassName="flex-1"
+                />
+                {hasPermission("pessoa_tipo_enderecos_create") &&
+                  !isDetails &&
+                  (isLoading ? (
+                    <Skeleton className="h-8 w-8 shrink-0" />
+                  ) : (
+                    <Button
+                      variant={"outline"}
+                      type="button"
+                      className="h-8 w-8 shrink-0"
+                      onClick={() =>
+                        setModal((prev) => {
+                          return {
+                            ...prev,
+                            showTipoEndereco: true,
+                          };
+                        })
+                      }
+                    >
+                      <Plus />
+                    </Button>
+                  ))}
               </div>
               <div className="flex items-center justify-between gap-2">
                 <CustomInputCep
@@ -424,15 +414,16 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
                       response.cidade
                     );
                   }}
+                  className="h-8 bg-white"
                 />
-                <div className="flex-1">
-                  <CustomInput
-                    label="Endereço"
-                    name={`enderecoAuxiliar.${index}.endereco`}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  />
-                </div>
+                <CustomInput
+                  label="Endereço"
+                  name={`enderecoAuxiliar.${index}.endereco`}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
               </div>
               <div className="flex items-center justify-between gap-2">
                 <CustomInput
@@ -440,109 +431,92 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
                   name={`enderecoAuxiliar.${index}.numero`}
                   loading={isLoading}
                   disabled={isDetails}
+                  className="h-8 bg-white"
                 />
-                <div className="flex-1">
-                  <CustomInput
-                    label="Bairro"
-                    name={`enderecoAuxiliar.${index}.bairro`}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  />
-                </div>
+                <CustomInput
+                  label="Bairro"
+                  name={`enderecoAuxiliar.${index}.bairro`}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
               </div>
               <div className="flex items-center justify-between gap-2">
-                <div className="flex-1">
-                  {/* {data.pessoa?.enderecoAuxiliar && isUpdate ? (
-                    <CustomComboboxCidades
-                      name={`enderecoAuxiliar.${index}.cidadeId`}
-                      label={"Cidade"}
-                      isLoading={isLoading}
-                      disabled={isDetails}
-                      initialData={
-                        data.pessoa.enderecoAuxiliar[index]
-                          ? {
-                              ...data.pessoa.enderecoAuxiliar[index].cidade,
-                              cidadeEstado: `${data.pessoa.enderecoAuxiliar[index].cidade.descricao} - ${data.pessoa.enderecoAuxiliar[index].cidade.estado.sigla}`,
-                            }
-                          : undefined
-                      }
-                    />
-                  ) : (
-                    <CustomComboboxCidades
-                      name={`enderecoAuxiliar.${index}.cidadeId`}
-                      label={"Cidade"}
-                      isLoading={isLoading}
-                      disabled={isDetails}
-                    />
-                  )} */}
-                </div>
-
-                <div className="flex-1">
-                  <CustomInput
-                    label="Complemento"
-                    name={`enderecoAuxiliar.${index}.complemento`}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  />
-                </div>
+                <CustomCombobox
+                  name={`enderecoAuxiliar.${index}.cidade`}
+                  label={"Cidade"}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  data={[]}
+                  fieldValue={"id"}
+                  fieldLabel={"descricao"}
+                  containerClassName="flex-1"
+                />
+                <CustomInput
+                  label="Complemento"
+                  name={`enderecoAuxiliar.${index}.complemento`}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="relative p-4 bg-background-content rounded-lg border">
+      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base bg-gradient-to-b from-background-modal to-background-content">
-            Contatos
-          </FormLabel>
+          <FormLabel className="font-semibold text-base">Contatos</FormLabel>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="E-mail"
-              name="email"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInput
-              label="E-mails Adicionais"
-              placeholder="Escreva separados por ponto e vírgula (;)"
-              name="emailAdicional"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomInput
+            label="E-mail"
+            name="email"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInput
+            label="E-mails Adicionais"
+            placeholder="Escreva separados por ponto e vírgula (;)"
+            name="emailAdicional"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            <CustomInputCelTel
-              label="Telefone"
-              name="fone"
-              mask="tel"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInputCelTel
-              label="Celular"
-              name="celular"
-              mask="cel"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInputCelTel
-              label="Whatsapp"
-              name="whatsapp"
-              mask="cel"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
+          <CustomInputCelTel
+            label="Telefone"
+            name="fone"
+            mask="tel"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInputCelTel
+            label="Celular"
+            name="celular"
+            mask="cel"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInputCelTel
+            label="Whatsapp"
+            name="whatsapp"
+            mask="cel"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
         <div className="flex justify-start items-end gap-2">
           <FormLabel className="font-semibold text-base mt-4">
@@ -551,7 +525,7 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           {!isDetails && (
             <Button
               variant="outline"
-              className="rounded-full hover:border-primary h-4 w-4 p-3 -translate-y-0.5"
+              className="rounded-full hover:border-primary h-4 w-4 p-3 -translate-y-0.5 cursor-pointer"
               type="button"
               onClick={handleAddContato}
             >
@@ -562,14 +536,14 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
         <div className="flex flex-col gap-4">
           {fieldsContatos.map((field, index) => (
             <div
-              className="relative border border-gray-200 p-4 rounded-md grid gap-2"
+              className="relative border border-gray-200 p-4 rounded grid gap-4 bg-background-alt"
               key={field.id}
             >
-              <div className="absolute -top-3 right-2 bg-white px-2">
+              <div className="absolute -top-3 right-2 bg-transparent px-2">
                 {!isDetails && (
                   <Button
                     variant="outline"
-                    className="hover:border-red-500 rounded-full h-4 w-4 p-3 -translate-y-0.5"
+                    className="hover:border-red-500 rounded-full h-4 w-4 p-3 -translate-y-0.5 cursor-pointer"
                     type="button"
                     onClick={() => removeContato(index)}
                   >
@@ -579,37 +553,25 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
               </div>
               <div className="flex items-center justify-between gap-2">
                 <div className="flex-1 flex items-end justify-between gap-2">
-                  <div className="flex-1 ">
-                    {/* {data.pessoa?.contato && isUpdate ? (
-                      <CustomComboboxTipoContatos
-                        initialData={
-                          data.pessoa.contato[index]
-                            ? data.pessoa.contato[index].pessoaTipoContato
-                            : undefined
-                        }
-                        name={`contato.${index}.pessoaTipoContatoId`}
-                        label={"Tipo de Contato"}
-                        isLoading={isLoading}
-                        disabled={isDetails}
-                      />
-                    ) : (
-                      <CustomComboboxTipoContatos
-                        name={`contato.${index}.pessoaTipoContatoId`}
-                        label={"Tipo de Contato"}
-                        isLoading={isLoading}
-                        disabled={isDetails}
-                      />
-                    )} */}
-                  </div>
+                  <CustomCombobox
+                    name={`contato.${index}.pessoaTipoContato`}
+                    label={"Tipo de Contato"}
+                    loading={isLoading || isLoadingTipoContato}
+                    disabled={isDetails}
+                    data={tipoContato?.items || []}
+                    fieldValue="id"
+                    fieldLabel="descricao"
+                    containerClassName="flex-1"
+                  />
                   {hasPermission("pessoa_tipo_contatos_create") &&
                     !isDetails &&
                     (isLoading ? (
-                      <Skeleton className="h-8 w-8  mb-4 shrink-0" />
+                      <Skeleton className="h-8 w-8 shrink-0" />
                     ) : (
                       <Button
                         variant={"outline"}
                         type="button"
-                        className="h-8 w-8 mb-4 shrink-0"
+                        className="h-8 w-8 shrink-0"
                         onClick={() =>
                           setModal((prev) => {
                             return {
@@ -623,134 +585,115 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
                       </Button>
                     ))}
                 </div>
-                <div className="flex-1">
-                  <CustomInput
-                    label="Nome do Responsável"
-                    name={`contato.${index}.nome`}
-                    type="text"
-                    disabled={isDetails}
-                  />
-                </div>
+                <CustomInput
+                  label="Nome do Responsável"
+                  name={`contato.${index}.nome`}
+                  type="text"
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
               </div>
               <div className="flex items-center justify-between gap-2">
-                <div className="flex-1">
-                  <CustomInput
-                    label="Departamento"
-                    name={`contato.${index}.departamento`}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  />
-                </div>
-                <div className="flex-1">
-                  {/* <CustomInputCelTel
-                    label={"Fone"}
-                    name={`contato.${index}.fone`}
-                    mask={"cel"}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  /> */}
-                </div>
+                <CustomInput
+                  label="Departamento"
+                  name={`contato.${index}.departamento`}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
+                <CustomInputCelTel
+                  label="Fone"
+                  name={`contato.${index}.fone`}
+                  mask="cel"
+                  loading={isLoading}
+                  disabled={isDetails}
+                  className="h-8 bg-white"
+                />
               </div>
               <div className="flex items-center justify-between gap-2">
-                <div className="flex-1">
-                  <CustomInput
-                    label="E-mail"
-                    name={`contato.${index}.email`}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  />
-                </div>
-                <div className="flex-1">
-                  <CustomInput
-                    label="Observação"
-                    name={`contato.${index}.observacao`}
-                    loading={isLoading}
-                    disabled={isDetails}
-                  />
-                </div>
+                <CustomInput
+                  label="E-mail"
+                  name={`contato.${index}.email`}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
+                <CustomInput
+                  label="Observação"
+                  name={`contato.${index}.observacao`}
+                  loading={isLoading}
+                  disabled={isDetails}
+                  containerClassName="flex-1"
+                  className="h-8 bg-white"
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="relative p-4 bg-background-content rounded-lg border">
+      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base bg-gradient-to-b from-background-modal to-background-content">
+          <FormLabel className="font-semibold text-base">
             Informações Complementares
           </FormLabel>
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex-1 flex items-end justify-between gap-2">
-            <div className="flex-1">
-              {/* {data.pessoa?.pessoaGrupo && isUpdate ? (
-                <CustomComboboxGrupos
-                  initialData={data.pessoa.pessoaGrupo}
-                  name={"pessoaGrupoId"}
-                  label={"Grupo de Pessoas"}
-                  isLoading={isLoading}
-                  disabled={isDetails}
-                />
-              ) : (
-                <CustomComboboxGrupos
-                  name={"pessoaGrupoId"}
-                  label={"Grupo de Pessoas"}
-                  isLoading={isLoading}
-                  disabled={isDetails}
-                />
-              )} */}
-            </div>
-            {hasPermission("pessoa_grupos_create") &&
-              !isDetails &&
-              (isLoading ? (
-                <Skeleton className="h-8 w-8  mb-4 shrink-0" />
-              ) : (
-                <Button
-                  variant={"outline"}
-                  type="button"
-                  className="h-8 w-8 mb-4 shrink-0"
-                  onClick={() =>
-                    setModal((prev) => {
-                      return {
-                        ...prev,
-                        showGrupo: true,
-                      };
-                    })
-                  }
-                >
-                  <Plus />
-                </Button>
-              ))}
-          </div>
+        <div className="flex items-end justify-between gap-2">
+          <CustomCombobox
+            name={"pessoaGrupo"}
+            label={"Grupo de Pessoas"}
+            loading={isLoading || isLoadingGrupoPessoas}
+            disabled={isDetails}
+            data={pessoaGrupos?.items || []}
+            fieldValue="id"
+            fieldLabel="descricao"
+            containerClassName="flex-1"
+          />
+          {hasPermission("pessoa_grupos_create") &&
+            !isDetails &&
+            (isLoading ? (
+              <Skeleton className="h-8 w-8 shrink-0" />
+            ) : (
+              <Button
+                variant="outline"
+                type="button"
+                className="h-8 w-8 shrink-0"
+                onClick={() =>
+                  setModal((prev) => {
+                    return {
+                      ...prev,
+                      showGrupo: true,
+                    };
+                  })
+                }
+              >
+                <Plus />
+              </Button>
+            ))}
         </div>
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 flex items-end justify-between gap-2">
-            <div className="flex-1">
-              {/* {data.pessoa?.pessoaOrigem && isUpdate ? (
-                <CustomComboboxOrigens
-                  initialData={data.pessoa.pessoaOrigem}
-                  name={"pessoaOrigemId"}
-                  label={"Origem"}
-                  isLoading={isLoading}
-                  disabled={isDetails}
-                />
-              ) : (
-                <CustomComboboxOrigens
-                  name={"pessoaOrigemId"}
-                  label={"Origem"}
-                  isLoading={isLoading}
-                  disabled={isDetails}
-                />
-              )} */}
-            </div>
+            <CustomCombobox
+              name={"pessoaOrigem"}
+              label={"Origem"}
+              loading={isLoading || isLoadingPessoaOrigem}
+              disabled={isDetails}
+              data={pessoaOrigem?.items || []}
+              fieldValue="id"
+              fieldLabel="descricao"
+              containerClassName="flex-1"
+            />
             {hasPermission("pessoa_origens_create") &&
               !isDetails &&
               (isLoading ? (
-                <Skeleton className="h-8 w-8  mb-4 shrink-0" />
+                <Skeleton className="h-8 w-8 shrink-0" />
               ) : (
                 <Button
                   variant={"outline"}
                   type="button"
-                  className="h-8 w-8 mb-4 shrink-0"
+                  className="h-8 w-8 shrink-0"
                   onClick={() =>
                     setModal((prev) => {
                       return {
@@ -765,33 +708,25 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
               ))}
           </div>
           <div className="flex-1 flex items-end justify-between gap-2">
-            <div className="flex-1">
-              {/* {data.pessoa?.estadoCivil && isUpdate ? (
-                <CustomComboboxEstadoCivis
-                  initialData={data.pessoa.estadoCivil}
-                  name={"estadoCivilId"}
-                  label={"Estado Civil"}
-                  isLoading={isLoading}
-                  disabled={isDetails}
-                />
-              ) : (
-                <CustomComboboxEstadoCivis
-                  name={"estadoCivilId"}
-                  label={"Estado Civil"}
-                  isLoading={isLoading}
-                  disabled={isDetails}
-                />
-              )} */}
-            </div>
+            <CustomCombobox
+              name={"estadoCivil"}
+              label={"Estado Civil"}
+              loading={isLoading || isLoadingEstadoCivil}
+              disabled={isDetails}
+              data={estadoCivil?.items || []}
+              fieldValue="id"
+              fieldLabel="descricao"
+              containerClassName="flex-1"
+            />
             {hasPermission("estado_civis_create") &&
               !isDetails &&
               (isLoading ? (
-                <Skeleton className="h-8 w-8  mb-4 shrink-0" />
+                <Skeleton className="h-8 w-8 shrink-0" />
               ) : (
                 <Button
                   variant={"outline"}
                   type="button"
-                  className="h-8 w-8 mb-4 shrink-0"
+                  className="h-8 w-8 shrink-0"
                   onClick={() =>
                     setModal((prev) => {
                       return {
@@ -807,50 +742,48 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           </div>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="Nacionalidade"
-              name="nacionalidade"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInput
-              label="Início de Atividade / Data de Nascimento"
-              name="dataNascimento"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-        </div>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex-1">
-            <CustomInput
-              label="Nome do Pai"
-              name="pai"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInput
-              label="Nome da Mãe"
-              name="mae"
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-        </div>
-        <div>
-          {/* <CustomInputTextarea
-            label="Observação Geral"
-            name={`observacaoGeral`}
-            className="h-20"
+          <CustomInput
+            label="Nacionalidade"
+            name="nacionalidade"
             loading={isLoading}
             disabled={isDetails}
-          /> */}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInput
+            label="Início de Atividade / Data de Nascimento"
+            name="dataNascimento"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
         </div>
+        <div className="flex items-center justify-between gap-2">
+          <CustomInput
+            label="Nome do Pai"
+            name="pai"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+          <CustomInput
+            label="Nome da Mãe"
+            name="mae"
+            loading={isLoading}
+            disabled={isDetails}
+            containerClassName="flex-1"
+            className="h-8 bg-white"
+          />
+        </div>
+        <CustomInputTextarea
+          label="Observação Geral"
+          name="observacaoGeral"
+          className="h-20 bg-white"
+          loading={isLoading}
+          disabled={isDetails}
+        />
       </div>
     </TabsContent>
   );

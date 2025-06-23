@@ -147,7 +147,7 @@ export default function CustomTable<T>({
             : undefined
         }
       >
-        <TableHeader className="bg-background-alt text-accent-foreground rounded-lg">
+        <TableHeader className="bg-background-overlay text-accent-foreground rounded-lg">
           <TableRow className="h-[clamp(2rem,2.4vw,8rem)]">
             {columns.map((col) => {
               const isActive = String(col.key) === order;
@@ -198,8 +198,8 @@ export default function CustomTable<T>({
                   key={index}
                   className={
                     index % 2
-                      ? "bg-background-alt h-[clamp(2rem,2.4vw,8rem)]"
-                      : "bg-white h-[clamp(2rem,2.4vw,8rem)]"
+                      ? "bg-background-overlay hover:bg-zinc-100"
+                      : "bg-white hover:bg-zinc-100"
                   }
                 >
                   {columns.map((col) => (

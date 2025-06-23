@@ -16,6 +16,7 @@ export const columns: ColumnConfig<IPessoa>[] = [
     sorted: true,
     className: "w-[20%]",
     headerClassName: "w-[20%]",
+    render: (value) => (value ? value : ""),
   },
   {
     key: "nomeFantasia",
@@ -23,6 +24,7 @@ export const columns: ColumnConfig<IPessoa>[] = [
     sorted: true,
     className: "w-[20%]",
     headerClassName: "w-[20%]",
+    render: (value) => (value ? value : ""),
   },
   {
     key: "cpfCnpj",
@@ -30,6 +32,7 @@ export const columns: ColumnConfig<IPessoa>[] = [
     sorted: true,
     className: "w-[15%]",
     headerClassName: "w-[15%]",
+    render: (value) => (value ? value : ""),
   },
   {
     key: "fone",
