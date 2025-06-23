@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { FormLabel, FormMessage } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TabsContent } from "@/components/ui/tabs";
+import { useEmpresas } from "@/hooks/tanstack/useEmpresa";
 import { useEstadoCivis } from "@/hooks/tanstack/useEstadoCivil";
 import { usePessoaGrupos } from "@/hooks/tanstack/usePessoaGrupo";
 import { usePessoaOrigens } from "@/hooks/tanstack/usePessoaOrigem";
 import { usePessoaSituacoes } from "@/hooks/tanstack/usePessoaSituacao";
 import { usePessoaTipoContatos } from "@/hooks/tanstack/usePessoaTipoContato";
 import { usePessoaTipoEnderecos } from "@/hooks/tanstack/usePessoaTipoEndereco";
+import { useUsuarios } from "@/hooks/tanstack/useUsuario";
 import { ISearchCep, ISearchCnpj } from "@/interfaces/search";
 import { usePermissionStore } from "@/store/permissionStore";
 import { Plus, X } from "lucide-react";
@@ -28,12 +30,13 @@ interface TabCadastroProps {
 
 export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
   const { hasPermission } = usePermissionStore();
+  const { control, formState, setValue } = useFormContext();
+
   const { data: situacao, isLoading: isLoadingSituacao } = usePessoaSituacoes(
     {}
   );
-  // const { data: empresa, isLoading: isLoadingEmpresa } = usePessoaEmpresas(
-  //   {}
-  // );
+
+  const { data: empresa, isLoading: isLoadingEmpresa } = useEmpresas({});
 
   const { data: tipoEndereco, isLoading: isLoadingTipoEndereco } =
     usePessoaTipoEnderecos({});
@@ -51,6 +54,22 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
     {}
   );
 
+  const { data: usuario, isLoading: isLoadingUsuario } = useUsuarios({});
+
+  if (empresa) {
+    setValue("empresa", {
+      id: empresa[0].id,
+      razaoSocial: empresa[0].razaoSocial,
+    });
+  }
+
+  if (usuario) {
+    setValue("empresa", {
+      id: usuario.items[0].id,
+      nome: usuario.items[0].nome,
+    });
+  }
+
   const [modal, setModal] = useState<{
     showSituacao: boolean;
     showGrupo: boolean;
@@ -66,8 +85,6 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
     showTipoContato: false,
     showTipoEndereco: false,
   });
-
-  const { control, formState, setValue } = useFormContext();
 
   const {
     fields: fieldsEnderecos,
@@ -174,9 +191,9 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           <CustomCombobox
             name="empresa"
             label={"Empresa"}
-            loading={isLoading}
+            loading={isLoading || isLoadingEmpresa}
             disabled={isDetails}
-            data={[]}
+            data={empresa || []}
             fieldValue="id"
             fieldLabel="razaoSocial"
             containerClassName="flex-1"
