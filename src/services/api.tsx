@@ -1,6 +1,7 @@
+import { logoutAction } from "@/actions/auth";
+import { signOut } from "@/auth";
 import axios from "axios";
 import { getCookie, setCookie } from "cookies-next";
-import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 
 export const api = axios.create({
@@ -107,7 +108,7 @@ api.interceptors.response.use(
         toast.warning("Sessão expirada. Faça login novamente.", {
           toastId: "session-expired",
         });
-        signOut();
+        logoutAction();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -118,7 +119,7 @@ api.interceptors.response.use(
       toast.warning("Sessão expirada. Faça login novamente.", {
         toastId: "session-expired",
       });
-      signOut();
+      logoutAction();
     }
 
     return Promise.reject(error);
