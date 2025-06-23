@@ -30,7 +30,7 @@ interface TabCadastroProps {
 
 export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
   const { hasPermission } = usePermissionStore();
-  const { control, formState, setValue, getValues } = useFormContext();
+  const { control, formState, setValue, getValues, watch } = useFormContext();
 
   const { data: situacao, isLoading: isLoadingSituacao } = usePessoaSituacoes(
     {}
@@ -129,11 +129,49 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
     setValue("numero", endereco.numero);
     setValue("email", endereco.email);
     setValue("dataNascimento", endereco.dataNascimento);
-    setValue("cidade", endereco.cidade);
+    setValue("cidade.id", endereco.cidadeId);
+    setValue("cidade.descricao", `${endereco.cidade} - ${endereco.uf}`);
   };
 
   return (
     <TabsContent value="cadastro" className="grid gap-4">
+      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
+        <div className="absolute -top-3">
+          <FormLabel className="font-semibold text-base">Natureza</FormLabel>
+        </div>
+        <div className="px-1 flex items-center justify-between gap-2">
+          <div className="text-ellipsis w-auto">
+            <CustomSwitch
+              label="Cliente"
+              name="tipoCliente"
+              //   caption={true}
+              loading={isLoading}
+              disabled={isDetails}
+            />
+          </div>
+          <div className="text-ellipsis w-auto">
+            <CustomSwitch
+              label="Fornecedor"
+              name="tipoFornecedor"
+              //   caption={true}
+              loading={isLoading}
+              disabled={isDetails}
+            />
+          </div>
+          <div className="text-ellipsis w-auto">
+            <CustomSwitch
+              label="Transportadora"
+              name="tipoTransportador"
+              //   caption={true}
+              loading={isLoading}
+              disabled={isDetails}
+            />
+          </div>
+        </div>
+        {formState?.errors && (
+          <FormMessage>{formState.errors.root?.message}</FormMessage>
+        )}
+      </div>
       <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">
           <FormLabel className="font-semibold text-base">
@@ -180,17 +218,17 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
               ))}
           </div>
         </div>
+        <CustomCombobox
+          name="empresa"
+          label={"Empresa"}
+          loading={isLoading || isLoadingEmpresa}
+          disabled={isDetails}
+          data={empresa || []}
+          fieldValue="id"
+          fieldLabel="razaoSocial"
+          containerClassName="flex-1"
+        />
         <div className="flex items-center justify-between gap-2">
-          <CustomCombobox
-            name="empresa"
-            label={"Empresa"}
-            loading={isLoading || isLoadingEmpresa}
-            disabled={isDetails}
-            data={empresa || []}
-            fieldValue="id"
-            fieldLabel="razaoSocial"
-            containerClassName="flex-1"
-          />
           <CustomInputCpfCnpj
             label={"CPF/CNPJ"}
             name="cpfCnpj"
@@ -200,8 +238,6 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
             containerClassName="flex-1"
             className="h-8 bg-white"
           />
-        </div>
-        <div className="flex items-center justify-between gap-2">
           <CustomInput
             label="RG / IE"
             name="rgIe"
@@ -215,65 +251,26 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
             name="rgOrgaoEmissor"
             loading={isLoading}
             disabled={isDetails}
-            containerClassName="flex-1"
+            containerClassName="w-36"
             className="h-8 bg-white"
           />
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <CustomInput
-            label="Razão Social / Nome Completo"
-            name="razaoSocial"
-            loading={isLoading}
-            disabled={isDetails}
-            containerClassName="flex-1"
-            className="h-8 bg-white"
-          />
-          <CustomInput
-            label="Nome Fantasia / Nome Social"
-            name="nomeFantasia"
-            loading={isLoading}
-            disabled={isDetails}
-            containerClassName="flex-1"
-            className="h-8 bg-white"
-          />
-        </div>
-      </div>
-      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
-        <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">Natureza</FormLabel>
-        </div>
-        <div className="px-1 flex items-center justify-between gap-2">
-          <div className="text-ellipsis w-auto">
-            <CustomSwitch
-              label="Cliente"
-              name="tipoCliente"
-              //   caption={true}
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="text-ellipsis w-auto">
-            <CustomSwitch
-              label="Fornecedor"
-              name="tipoFornecedor"
-              //   caption={true}
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-          <div className="text-ellipsis w-auto">
-            <CustomSwitch
-              label="Transportadora"
-              name="tipoTransportador"
-              //   caption={true}
-              loading={isLoading}
-              disabled={isDetails}
-            />
-          </div>
-        </div>
-        {formState?.errors && (
-          <FormMessage>{formState.errors.root?.message}</FormMessage>
-        )}
+        <CustomInput
+          label="Razão Social / Nome Completo"
+          name="razaoSocial"
+          loading={isLoading}
+          disabled={isDetails}
+          containerClassName="flex-1"
+          className="h-8 bg-white"
+        />
+        <CustomInput
+          label="Nome Fantasia / Nome Social"
+          name="nomeFantasia"
+          loading={isLoading}
+          disabled={isDetails}
+          containerClassName="flex-1"
+          className="h-8 bg-white"
+        />
       </div>
       <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
         <div className="absolute -top-3">

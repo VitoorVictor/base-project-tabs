@@ -93,24 +93,29 @@ export function CustomInputCep({
                   {...field}
                   {...props}
                   className={cn(
-                    "transition-colors",
+                    "transition-colors", 
                     fieldState.error &&
                       "border-destructive focus-visible:ring-destructive",
                     className
                   )}
                   onChange={(e) => {
-                    const maskedValue = insertMaskInCep(e.target.value); // Aplica a máscara
-                    field.onChange(maskedValue); // Atualiza o estado do formulário
+                    const maskedValue = insertMaskInCep(e.target.value);
+                    field.onChange(maskedValue);
                   }}
                   disabled={props.disabled || loading}
                 />
+
                 {!props.disabled && (
                   <div className="absolute right-0 bottom-0">
                     <Button
                       variant="ghost"
                       type="button"
                       size="icon"
-                      className="h-8"
+                      className={cn(
+                        "h-8 bg-transparent border border-input rounded-l-none cursor-pointer transition-colors",
+                        fieldState.error &&
+                          "border-destructive focus-visible:ring-destructive"
+                      )}
                       onClick={() => findCep(field.value)}
                     >
                       <Search />

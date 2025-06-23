@@ -122,13 +122,13 @@ export function CustomInputCpfCnpj({
                     field.onChange(maskedValue); // Atualiza o estado do formulário
                   }}
                 />
-                {!props.disabled && lengthMask > 11 && (
+                {!props.disabled && lengthMask == 14 && (
                   <div className="absolute right-0 bottom-0">
                     <Button
                       variant="ghost"
                       type="button"
                       size="icon"
-                      className="h-8 bg-background"
+                      className="h-8 bg-background border border-input rounded-l-none cursor-pointer"
                       onClick={() => getEmpresaByCNPJ(field.value)}
                     >
                       <Search />

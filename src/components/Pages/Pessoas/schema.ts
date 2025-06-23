@@ -1,4 +1,4 @@
-import { object, z } from "zod";
+import { z } from "zod";
 
 const validaCPF = (cpf: string) => {
   let soma = 0;
@@ -53,12 +53,20 @@ const validaCNPJ = (cnpj: string) => {
 export const formSchema = z
   .object({
     dataCadastro: z.string().nonempty("Data do cadastro é obrigatória"),
-    pessoaSituacaoId: z.number().nullable().optional(),
+    pessoaSituacao: z.object(
+      {
+        id: z.number(),
+        descricao: z.string().optional(),
+      },
+      {
+        message: "Situação é obrigatória",
+      }
+    ),
     empresa: z.object({
       id: z.number({
         message: "Empresa é obrigatória",
       }),
-      razaoSocail: z.string().optional(),
+      razaoSocial: z.string().optional(),
     }),
     pessoaGrupo: z
       .object({
@@ -87,45 +95,81 @@ export const formSchema = z
         { message: "CPF/CNPJ inválido." }
       )
       .optional(),
-    rgIe: z.string().min(3, "RG / IE deve ter mais de 3 digitos").optional(),
+    rgIe: z
+      .string()
+      .min(3, "RG / IE deve ter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
+      .optional(),
     rgOrgaoEmissor: z
       .string()
       .min(2, "Emissão deve ter mais de 2 dig.")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
-    nacionalidade: z.string().optional(),
+    nacionalidade: z
+      .string()
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
+      .optional(),
     tipoCliente: z.boolean(),
     tipoFornecedor: z.boolean(),
     tipoTransportador: z.boolean(),
     dataNascimento: z
       .string()
-      .transform((val) => (val.trim() === "" ? undefined : val))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     razaoSocial: z
-      .string({ message: "Razão social/Nome Completo é obrigatória" })
-      .min(3, "Mínimo de 3 letras"),
+      .string()
+      .nonempty("Razão social/Nome Completo é obrigatória"),
     nomeFantasia: z
       .string()
       .min(3, "Nome fantasia / Nome social deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
-    cep: z.string().min(9, "CEP inválido").max(9, "CEP inválido").optional(),
+    cep: z
+      .string()
+      .min(9, "CEP inválido")
+      .max(9, "CEP inválido")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
+      .optional(),
     endereco: z
       .string()
       .min(3, "Endereço deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     numero: z
       .string()
       .min(3, "Número deve conter mais de 2 digitos")
       .max(4, "Endereço deve conter no máximo de 4 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     bairro: z
       .string()
       .min(3, "Bairro deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
-    cidade: z.object({
-      id: z.number().min(1, { message: "Cidade é obrigatória" }),
-      descricao: z.string().optional(),
-    }),
-    estadoCivilId: z
+    cidade: z.object(
+      {
+        id: z.number(),
+        descricao: z.string().optional(),
+      },
+      { message: "Cidade é obrigatória" }
+    ),
+    estadoCivil: z
       .object({
         id: z.number(),
         descricao: z.string().optional(),
@@ -134,59 +178,96 @@ export const formSchema = z
     complemento: z
       .string()
       .min(3, "Complemento deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
-    email: z.string().email("Email inválido").optional(),
-    emailAdicional: z.string().optional(),
+    email: z
+      .string()
+      .email("Email inválido")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
+      .optional(),
+    emailAdicional: z
+      .string()
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
+      .optional(),
     fone: z
       .string()
       .min(14, "Fone inválido") // Formato esperado: (##) ####-####
       .max(15, "Fone inválido")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     celular: z
       .string()
       .min(15, "Celular inválido") // Formato esperado: (##) # ####-####
       .max(16, "Celular inválido")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     whatsapp: z
       .string()
       .min(14, "Whatsapp inválido") // Formato esperado: (##) # ####-#### ou (##) ####-####
       .max(16, "Whatsapp inválido")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     pai: z
       .string()
       .min(3, "Nome do pai deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     mae: z
       .string()
       .min(3, "Nome da mãe deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     contato: z
       .array(
         z.object({
           id: z.number().optional(),
-          pessoaTipoContato: z
-            .object({
-              id: z.number(),
-              descricao: z.string().optional(),
-            })
-            .optional(),
-          nome: z
-            .string()
-            .min(3, "Reponsável deve conter mais de 3 digitos")
-            .optional(),
+          pessoaTipoContato: z.object({
+            id: z.number(),
+            descricao: z.string().optional(),
+          }),
+          nome: z.string().min(3, "Reponsável deve conter mais de 3 digitos"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
           departamento: z
             .string()
-            .min(3, "Departamento deve conter mais de 3 digitos")
-            .optional(),
+            .min(3, "Departamento deve conter mais de 3 digitos"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
           fone: z
             .string()
             .min(14, "Fone inválido") // Formato esperado: (##) ####-####
-            .max(16, "Fone inválido")
-            .optional(),
-          email: z.string().email("Email inválido").optional(),
+            .max(16, "Fone inválido"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
+          email: z.string().email("Email inválido"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
           observacao: z
             .string()
-            .min(3, "Observação deve conter mais de 3 digitos")
+            // .min(3, "Observação deve conter mais de 3 digitos")
+            // .or(z.literal(""))
+            // .transform((val) => (val.trim() === "" ? null : val))
+            // .nullable()
             .optional(),
         })
       )
@@ -195,65 +276,83 @@ export const formSchema = z
       .array(
         z.object({
           id: z.number().optional(),
-          cep: z
-            .string()
-            .min(9, "CEP inválido")
-            .max(9, "CEP inválido")
-            .optional(),
-          endereco: z
-            .string()
-            .min(3, "Endereço deve conter mais de 3 digitos")
-            .optional(),
+          cep: z.string().min(9, "CEP inválido").max(9, "CEP inválido"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
+          endereco: z.string().min(3, "Endereço deve conter mais de 3 digitos"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
           numero: z
             .string()
             .min(3, "Número deve conter mais de 2 digitos")
-            .max(4, "Endereço deve conter no máximo de 4 digitos")
-            .optional(),
-          bairro: z
-            .string()
-            .min(3, "Bairro deve conter mais de 3 digitos")
-            .optional(),
-          cidadeId: z.number().nullable().optional(),
-          complemento: z
-            .string()
-            .min(3, "Complemento deve conter mais de 3 digitos")
-            .optional(),
-          pessoaTipoEndereco: z
-            .object({
-              id: z.number(),
-              descricao: z.string().optional(),
-            })
-            .optional(),
+            .max(4, "Endereço deve conter no máximo de 4 digitos"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
+          bairro: z.string().min(3, "Bairro deve conter mais de 3 digitos"),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
+          cidade: z.object({
+            id: z.number(),
+            descricao: z.string().optional(),
+          }),
+          complemento: z.string().optional(),
+          // .or(z.literal(""))
+          // .transform((val) => (val.trim() === "" ? null : val))
+          // .nullable(),
+          pessoaTipoEndereco: z.object({
+            id: z.number(),
+            descricao: z.string().optional(),
+          }),
         })
       )
       .optional(),
     observacaoGeral: z
       .string()
       .min(3, "Observação geral deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     inscricaoMunicipal: z
       .string()
       .min(3, "Inscrição municipal deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     inscricaoSuframa: z
       .string()
       .min(3, "Inscrição suframa deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
     documentoEstrangeiro: z
       .string()
       .min(3, "Documento estrangeiro deve conter mais de 3 digitos")
+      .or(z.literal(""))
+      .transform((val) => (val.trim() === "" ? null : val))
+      .nullable()
       .optional(),
-    tipoContribuinte: z.number().optional(),
+    tipoContribuinte: z.number().nullable().optional(),
     limiteCredito: z
       .number()
       .transform((val) => val * 100)
+      .nullable()
       .optional(),
     clienteFinal: z.boolean(),
     optanteSimples: z.boolean(),
     produtorRural: z.boolean(),
     issRetido: z.boolean(),
-    vendedorId: z.number().nullable().optional(),
-    natureza: z.string().optional(),
+    vendedor: z.object({
+      id: z.number(),
+      nome: z.string().optional(),
+    }),
+    natureza: z.string().optional().or(z.literal("")),
   })
   .refine(
     (data) => data.tipoCliente || data.tipoFornecedor || data.tipoTransportador,

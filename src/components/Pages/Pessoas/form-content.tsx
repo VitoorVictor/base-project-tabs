@@ -43,8 +43,40 @@ export function FormContent({
     resolver: zodResolver(formSchema),
     defaultValues: {
       dataCadastro: new Date().toISOString().split("T")[0],
-      cidade: {},
       cpfCnpj: "",
+      rgIe: "",
+      rgOrgaoEmissor: "",
+      nacionalidade: "",
+      tipoCliente: true,
+      tipoFornecedor: false,
+      tipoTransportador: false,
+      dataNascimento: undefined,
+      razaoSocial: "",
+      nomeFantasia: "",
+      cep: "",
+      endereco: "",
+      numero: "",
+      bairro: "",
+      complemento: "",
+      email: "",
+      emailAdicional: "",
+      fone: "",
+      celular: "",
+      whatsapp: "",
+      pai: "",
+      mae: "",
+      contato: [],
+      enderecoAuxiliar: [],
+      observacaoGeral: "",
+      inscricaoMunicipal: "",
+      inscricaoSuframa: "",
+      documentoEstrangeiro: "",
+      tipoContribuinte: 0,
+      limiteCredito: 0,
+      clienteFinal: false,
+      optanteSimples: false,
+      produtorRural: false,
+      issRetido: false,
     },
   });
 
@@ -56,12 +88,74 @@ export function FormContent({
   //   }
   // }, [data]);
 
+  const normalizeValues = (values: FormSchema) => {
+    const result: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(values)) {
+      // Ignora null ou undefined
+      if (value === null || value === undefined) continue;
+
+      // Se for objeto com apenas { id, descricao } ou similar
+      if (
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        "id" in value &&
+        Object.keys(value).every((k) =>
+          ["id", "descricao", "nome", "razaoSocial"].includes(k)
+        )
+      ) {
+        result[`${key}Id`] = value.id;
+      }
+
+      // Arrays de objetos (ex: contato, enderecoAuxiliar)
+      else if (Array.isArray(value)) {
+        const arr = value
+          .map((item) => {
+            if (typeof item !== "object" || item === null) return null;
+
+            const cleaned: Record<string, any> = {};
+            for (const [k, v] of Object.entries(item)) {
+              if (v === null || v === undefined) continue;
+
+              // Se for subobjeto com id
+              if (
+                typeof v === "object" &&
+                !Array.isArray(v) &&
+                "id" in v &&
+                Object.keys(v).every((kk) =>
+                  ["id", "descricao", "nome"].includes(kk)
+                )
+              ) {
+                cleaned[`${k}Id`] = v.id;
+              } else {
+                cleaned[k] = v;
+              }
+            }
+
+            return Object.keys(cleaned).length > 0 ? cleaned : null;
+          })
+          .filter(Boolean); // Remove nulos
+
+        if (arr.length > 0) result[key] = arr;
+      }
+
+      // Se for valor simples
+      else {
+        result[key] = value;
+      }
+    }
+
+    return result;
+  };
+
   const onSubmitForm = async (values: FormSchema) => {
     setLoading(true);
+    const normalizedValues = normalizeValues(values);
     try {
+      console.log("normalizedValues:", normalizedValues);
       const res = isUpdate
-        ? await updatePessoa.mutateAsync({ id: id!, data: values })
-        : await createPessoa.mutateAsync(values);
+        ? await updatePessoa.mutateAsync({ id: id!, data: normalizedValues })
+        : await createPessoa.mutateAsync(normalizedValues);
       if (res && res.error === "") {
         toast.success(
           res.message ||

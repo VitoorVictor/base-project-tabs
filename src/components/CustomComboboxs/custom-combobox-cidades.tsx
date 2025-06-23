@@ -75,8 +75,6 @@ export function CustomComboboxCidades({
     }
   );
 
-  console.log(data?.items);
-
   return (
     <FormField
       name={name}

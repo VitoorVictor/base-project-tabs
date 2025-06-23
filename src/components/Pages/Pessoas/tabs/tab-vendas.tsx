@@ -17,7 +17,6 @@ export function TabVendas({ isDetails, isLoading }: TabVendasProps) {
 
   useEffect(() => {
     if (usuario && !getValues("vendedor")) {
-      console.log(usuario);
       setValue("vendedor", {
         id: usuario.items[0].id,
         nome: usuario.items[0].nome,
@@ -42,6 +41,7 @@ export function TabVendas({ isDetails, isLoading }: TabVendasProps) {
             data={usuario?.items || []}
             fieldLabel="nome"
             fieldValue="id"
+            containerClassName="w-full"
           />
         </div>
       </div>

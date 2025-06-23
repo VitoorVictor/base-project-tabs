@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { PatternFormat, PatternFormatProps } from "react-number-format";
+import { NumericFormat, NumericFormatProps } from "react-number-format";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   FormControl,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 
-interface CustomInputNumericProps extends PatternFormatProps {
+interface CustomInputCurrencyProps extends NumericFormatProps {
   name: string;
   label: string;
   hint?: string;
@@ -23,7 +23,7 @@ interface CustomInputNumericProps extends PatternFormatProps {
   containerClassName?: string;
 }
 
-export function CustomInputNumeric({
+export function CustomInputCurrency({
   name,
   label,
   hint,
@@ -31,12 +31,12 @@ export function CustomInputNumeric({
   containerClassName,
   className,
   ...props
-}: CustomInputNumericProps) {
+}: CustomInputCurrencyProps) {
   const { control } = useFormContext();
 
   if (!control) {
     throw new Error(
-      "CustomInputNumeric deve ser usado dentro de um FormProvider"
+      "CustomInputCurrency deve ser usado dentro de um FormProvider"
     );
   }
 
@@ -54,12 +54,17 @@ export function CustomInputNumeric({
             {loading ? (
               <Skeleton className="h-10 w-full rounded-md" />
             ) : (
-              <PatternFormat
+              <NumericFormat
                 {...props}
                 {...field}
                 onValueChange={(value) =>
                   field.onChange(value.floatValue)
                 }
+                thousandSeparator="."
+                decimalSeparator=","
+                prefix="R$ "
+                decimalScale={2}
+                fixedDecimalScale
                 customInput={Input}
                 className={cn(
                   "transition-colors",
