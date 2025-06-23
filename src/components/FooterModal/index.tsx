@@ -50,11 +50,16 @@ export function FooterModal({
             <DialogFooter>
               <Button
                 variant="ghost"
+                className="cursor-pointer"
                 onClick={() => setShowConfirmDialog(false)}
               >
                 Voltar
               </Button>
-              <Button variant="destructive" onClick={handleConfirm}>
+              <Button
+                variant="destructive"
+                className="cursor-pointer"
+                onClick={handleConfirm}
+              >
                 Sim, cancelar
               </Button>
             </DialogFooter>

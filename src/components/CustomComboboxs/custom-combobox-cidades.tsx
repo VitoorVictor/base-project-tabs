@@ -118,7 +118,9 @@ export function CustomComboboxCidades({
                       >
                         {/* Exibir fieldLabel, mas armazenar fieldValue */}
                         <span className="flex-1 truncate text-left">
-                          {field.value ? field.value?.descricao : placeholder}
+                          {field.value
+                            ? field.value?.cidadeEstado
+                            : placeholder}
                         </span>
                         {!field.value && (
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -184,7 +186,7 @@ export function CustomComboboxCidades({
                                         ? null
                                         : {
                                             id: item.id,
-                                            descricao: item.cidadeEstado,
+                                            cidadeEstado: item.cidadeEstado,
                                           }
                                     );
                                     setOpen(false);

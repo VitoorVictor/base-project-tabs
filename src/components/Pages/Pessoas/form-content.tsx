@@ -82,11 +82,11 @@ export function FormContent({
 
   const { handleSubmit, reset } = form;
 
-  // useEffect(() => {
-  //   if (data) {
-  //     reset(data);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      reset(data);
+    }
+  }, [data]);
 
   const normalizeValues = (values: FormSchema) => {
     const result: Record<string, any> = {};
@@ -101,7 +101,7 @@ export function FormContent({
         !Array.isArray(value) &&
         "id" in value &&
         Object.keys(value).every((k) =>
-          ["id", "descricao", "nome", "razaoSocial"].includes(k)
+          ["id", "descricao", "nome", "razaoSocial", "cidadeEstado"].includes(k)
         )
       ) {
         result[`${key}Id`] = value.id;
@@ -123,7 +123,7 @@ export function FormContent({
                 !Array.isArray(v) &&
                 "id" in v &&
                 Object.keys(v).every((kk) =>
-                  ["id", "descricao", "nome"].includes(kk)
+                  ["id", "descricao", "nome", "cidadeEstado"].includes(kk)
                 )
               ) {
                 cleaned[`${k}Id`] = v.id;

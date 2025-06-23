@@ -53,15 +53,18 @@ const validaCNPJ = (cnpj: string) => {
 export const formSchema = z
   .object({
     dataCadastro: z.string().nonempty("Data do cadastro é obrigatória"),
-    pessoaSituacao: z.object(
-      {
-        id: z.number(),
-        descricao: z.string().optional(),
-      },
-      {
-        message: "Situação é obrigatória",
-      }
-    ),
+    pessoaSituacao: z
+      .object(
+        {
+          id: z.number(),
+          descricao: z.string().optional(),
+        },
+        {
+          message: "Situação é obrigatória",
+        }
+      )
+      .nullable()
+      .optional(),
     empresa: z.object({
       id: z.number({
         message: "Empresa é obrigatória",
@@ -73,16 +76,18 @@ export const formSchema = z
         id: z.number(),
         descricao: z.string().optional(),
       })
+      .nullable()
       .optional(),
     pessoaOrigem: z
       .object({
         id: z.number(),
         descricao: z.string().optional(),
       })
+      .nullable()
       .optional(),
     cpfCnpj: z
       .string()
-      .transform((val) => (val.trim() === "" ? undefined : val)) // Remove caracteres não numéricos
+      .transform((val) => (val.trim() === "" ? null : val)) // Remove caracteres não numéricos
       .refine(
         (val) => {
           if (!val) return true; // Permite null (campo opcional)
@@ -94,6 +99,7 @@ export const formSchema = z
         },
         { message: "CPF/CNPJ inválido." }
       )
+      .nullable()
       .optional(),
     rgIe: z
       .string()
@@ -134,7 +140,7 @@ export const formSchema = z
       .optional(),
     cep: z
       .string()
-      .min(9, "CEP inválido")
+      .min(8, "CEP inválido")
       .max(9, "CEP inválido")
       .or(z.literal(""))
       .transform((val) => (val.trim() === "" ? null : val))
@@ -165,7 +171,7 @@ export const formSchema = z
     cidade: z.object(
       {
         id: z.number(),
-        descricao: z.string().optional(),
+        cidadeEstado: z.string().optional(),
       },
       { message: "Cidade é obrigatória" }
     ),
@@ -174,6 +180,7 @@ export const formSchema = z
         id: z.number(),
         descricao: z.string().optional(),
       })
+      .nullable()
       .optional(),
     complemento: z
       .string()
@@ -297,7 +304,7 @@ export const formSchema = z
           // .nullable(),
           cidade: z.object({
             id: z.number(),
-            descricao: z.string().optional(),
+            cidadeEstado: z.string().optional(),
           }),
           complemento: z.string().optional(),
           // .or(z.literal(""))

@@ -10,7 +10,7 @@ export async function fetchPessoaAll(
   if (filters.page) params.page = filters.page;
   if (filters.type) params.type = filters.type.toUpperCase();
   if (filters.order) params.order = filters.order;
-  if (filters.search) params.descricao = filters.search;
+  if (filters.search) params.filtro = filters.search;
 
   const { data } = await api.get(`/pessoas`, { params });
   return data;

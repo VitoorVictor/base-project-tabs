@@ -93,11 +93,12 @@ export function CustomInputCep({
                   {...field}
                   {...props}
                   className={cn(
-                    "transition-colors", 
+                    "transition-colors",
                     fieldState.error &&
                       "border-destructive focus-visible:ring-destructive",
                     className
                   )}
+                  value={field.value}
                   onChange={(e) => {
                     const maskedValue = insertMaskInCep(e.target.value);
                     field.onChange(maskedValue);

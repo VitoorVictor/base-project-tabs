@@ -221,7 +221,10 @@ export default function CustomTable<T>({
                       <div className="text-center">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 p-0">
+                            <Button
+                              variant="ghost"
+                              className="h-8 p-0 cursor-pointer"
+                            >
                               <span className="sr-only">Open menu</span>
                               <MoreHorizontal className="h-4 w-4 text-label" />
                             </Button>

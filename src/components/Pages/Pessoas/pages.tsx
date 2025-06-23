@@ -160,7 +160,10 @@ export function PessoaPage() {
               onSubmit={searchingItem}
             />
           </div>
-          <Button onClick={addItem} className="h-8 flex items-center">
+          <Button
+            onClick={addItem}
+            className="h-8 flex items-center cursor-pointer"
+          >
             <Plus className="h-4 w-4 mr-0 md:ml-2" />
             <span className="hidden md:inline">Nova Pessoa</span>
           </Button>
