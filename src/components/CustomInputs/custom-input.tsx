@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -37,6 +39,8 @@ export function CustomInput({
     throw new Error("CustomInput deve ser usado dentro de um FormProvider");
   }
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <FormField
       control={control}
@@ -51,17 +55,30 @@ export function CustomInput({
             {loading ? (
               <Skeleton className="h-10 w-full rounded-md" />
             ) : (
-              <Input
-                {...field}
-                {...props}
-                className={cn(
-                  "transition-colors",
-                  fieldState.error &&
-                    "border-destructive focus-visible:ring-destructive",
-                  className
+              <div className="relative">
+                <Input
+                  {...field}
+                  {...props}
+                  className={cn(
+                    "transition-colors",
+                    fieldState.error &&
+                      "border-destructive focus-visible:ring-destructive",
+                    className
+                  )}
+                  type={showPassword ? "text" : props.type}
+                  disabled={props.disabled || loading}
+                />
+                {props.type === "password" && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-2 top-1.5 p-1 hover:bg-primary/20 rounded-md cursor-pointer"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 )}
-                disabled={props.disabled || loading}
-              />
+              </div>
             )}
           </FormControl>
 

@@ -6,6 +6,7 @@ import { SideMain } from "./side-main";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { SideLogo } from "./side-logo";
@@ -36,6 +37,8 @@ import { RecpagDocumentoTipoPage } from "../Pages/RecpagDocumentoTipos/pages";
 import { PessoaGrupoPage } from "../Pages/PessoaGrupos/pages";
 import { PlanoContaPage } from "../Pages/PlanoContas/pages";
 import { PessoaPage } from "../Pages/Pessoas/pages";
+import { Button } from "../ui/button";
+import { logoutAction } from "@/actions/auth";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 // & {
@@ -271,9 +274,16 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
       <SidebarContent className="custom-scrollbar bg-primary">
         <SideMain items={data} />
       </SidebarContent>
-      {/* <SidebarFooter className="bg-primary">
-        <SideUser email={"c3po@yodacrops.com.br"} />
-      </SidebarFooter> */}
+      <SidebarFooter className="bg-primary">
+        {/* <SideUser email={"c3po@yodacrops.com.br"} /> */}
+        <Button
+          className="w-full cursor-pointer"
+          variant="secondary"
+          onClick={async () => await logoutAction()}
+        >
+          Sair
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 }
