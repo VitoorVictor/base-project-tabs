@@ -1,6 +1,9 @@
 import { CustomCombobox } from "@/components/CustomComboboxs/custom-combobox";
 import { FormLabel } from "@/components/ui/form";
 import { TabsContent } from "@/components/ui/tabs";
+import { useUsuarios } from "@/hooks/tanstack/useUsuario";
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface TabVendasProps {
   isDetails?: boolean;
@@ -8,6 +11,20 @@ interface TabVendasProps {
 }
 
 export function TabVendas({ isDetails, isLoading }: TabVendasProps) {
+  const { data: usuario, isLoading: isLoadingUsuario } = useUsuarios({});
+
+  const { setValue, getValues } = useFormContext();
+
+  useEffect(() => {
+    if (usuario && !getValues("vendedor")) {
+      console.log(usuario);
+      setValue("vendedor", {
+        id: usuario.items[0].id,
+        nome: usuario.items[0].nome,
+      });
+    }
+  }, [usuario]);
+
   return (
     <TabsContent value="vendas">
       <div className="relative p-4 pt-8 bg-background-overlay rounded-lg border">
@@ -20,11 +37,11 @@ export function TabVendas({ isDetails, isLoading }: TabVendasProps) {
           <CustomCombobox
             name="vendedor"
             label="Vendedor Reponsável"
-            loading={isLoading}
+            loading={isLoading || isLoadingUsuario}
             disabled={isDetails}
-            data={[]}
-            fieldLabel={"id"}
-            fieldValue={"nome"}
+            data={usuario?.items || []}
+            fieldLabel="nome"
+            fieldValue="id"
           />
         </div>
       </div>

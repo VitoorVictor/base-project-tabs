@@ -1,4 +1,5 @@
 import { CustomCombobox } from "@/components/CustomComboboxs/custom-combobox";
+import { CustomComboboxCidades } from "@/components/CustomComboboxs/custom-combobox-cidades";
 import { CustomInput } from "@/components/CustomInputs/custom-input";
 import { CustomInputCelTel } from "@/components/CustomInputs/custom-input-celtel";
 import { CustomInputCep } from "@/components/CustomInputs/custom-input-cep";
@@ -16,11 +17,10 @@ import { usePessoaOrigens } from "@/hooks/tanstack/usePessoaOrigem";
 import { usePessoaSituacoes } from "@/hooks/tanstack/usePessoaSituacao";
 import { usePessoaTipoContatos } from "@/hooks/tanstack/usePessoaTipoContato";
 import { usePessoaTipoEnderecos } from "@/hooks/tanstack/usePessoaTipoEndereco";
-import { useUsuarios } from "@/hooks/tanstack/useUsuario";
 import { ISearchCep, ISearchCnpj } from "@/interfaces/search";
 import { usePermissionStore } from "@/store/permissionStore";
 import { Plus, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 interface TabCadastroProps {
@@ -30,7 +30,7 @@ interface TabCadastroProps {
 
 export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
   const { hasPermission } = usePermissionStore();
-  const { control, formState, setValue } = useFormContext();
+  const { control, formState, setValue, getValues } = useFormContext();
 
   const { data: situacao, isLoading: isLoadingSituacao } = usePessoaSituacoes(
     {}
@@ -54,21 +54,14 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
     {}
   );
 
-  const { data: usuario, isLoading: isLoadingUsuario } = useUsuarios({});
-
-  if (empresa) {
-    setValue("empresa", {
-      id: empresa[0].id,
-      razaoSocial: empresa[0].razaoSocial,
-    });
-  }
-
-  if (usuario) {
-    setValue("empresa", {
-      id: usuario.items[0].id,
-      nome: usuario.items[0].nome,
-    });
-  }
+  useEffect(() => {
+    if (empresa && !getValues("empresa")) {
+      setValue("empresa", {
+        id: empresa[0].id,
+        razaoSocial: empresa[0].razaoSocial,
+      });
+    }
+  }, [empresa]);
 
   const [modal, setModal] = useState<{
     showSituacao: boolean;
@@ -326,14 +319,10 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <CustomCombobox
+          <CustomComboboxCidades
             name="cidade"
             label="Cidade"
-            loading={isLoading}
             disabled={isDetails}
-            data={[]}
-            fieldValue="id"
-            fieldLabel="descricao"
             containerClassName="flex-1"
           />
           <CustomInput
@@ -460,14 +449,10 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
                 />
               </div>
               <div className="flex items-center justify-between gap-2">
-                <CustomCombobox
+                <CustomComboboxCidades
                   name={`enderecoAuxiliar.${index}.cidade`}
                   label={"Cidade"}
-                  loading={isLoading}
                   disabled={isDetails}
-                  data={[]}
-                  fieldValue={"id"}
-                  fieldLabel={"descricao"}
                   containerClassName="flex-1"
                 />
                 <CustomInput

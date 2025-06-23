@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,28 +28,25 @@ import {
 } from "../ui/form";
 import { useFormContext } from "react-hook-form";
 import { Skeleton } from "../ui/skeleton";
+import { useDebounce } from "@/hooks/useDebounce";
+import { ICidade } from "@/interfaces/cidade";
+import { useCidades } from "@/hooks/tanstack/useCidade";
 
-interface CustomComboboxProps {
+interface CustomComboboxCidadesProps {
   name: string;
   label: string;
-  data: any[];
-  fieldLabel: string;
-  fieldValue: string;
   placeholder?: string;
   empty?: string;
   hint?: string;
-  loading?: boolean;
   containerClassName?: string;
+  loading?: boolean;
   disabled?: boolean;
   searchPlaceholder?: string;
 }
 
-export function CustomCombobox({
+export function CustomComboboxCidades({
   name,
   label,
-  data,
-  fieldLabel,
-  fieldValue,
   placeholder = "Selecione uma opção",
   empty = "Nenhum item encontrado",
   hint,
@@ -57,13 +54,28 @@ export function CustomCombobox({
   containerClassName,
   disabled = false,
   searchPlaceholder = "Digite para procurar...",
-}: CustomComboboxProps) {
+}: CustomComboboxCidadesProps) {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const debouncedValue = useDebounce(value, 300);
+
   const { control } = useFormContext();
 
   if (!control) {
-    throw new Error("CustomCombobox deve ser usado dentro de um FormProvider");
+    throw new Error(
+      "CustomComboboxCidades deve ser usado dentro de um FormProvider"
+    );
   }
+
+  const { data, isLoading } = useCidades(
+    { search: debouncedValue },
+    {
+      enabled: debouncedValue.length > 2,
+      queryKey: ["cidades", debouncedValue],
+    }
+  );
+
+  console.log(data?.items);
 
   return (
     <FormField
@@ -108,9 +120,7 @@ export function CustomCombobox({
                       >
                         {/* Exibir fieldLabel, mas armazenar fieldValue */}
                         <span className="flex-1 truncate text-left">
-                          {field.value
-                            ? field.value?.[fieldLabel]
-                            : placeholder}
+                          {field.value ? field.value?.descricao : placeholder}
                         </span>
                         {!field.value && (
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -148,39 +158,51 @@ export function CustomCombobox({
                         <CommandInput
                           placeholder={searchPlaceholder}
                           className="h-8"
+                          value={value}
+                          onValueChange={setValue}
                         />
                         <CommandList className="custom-scrollbar">
-                          <CommandEmpty>{empty}</CommandEmpty>
+                          <CommandEmpty>
+                            {isLoading ? (
+                              <span className="flex items-center justify-center gap-2 text-slate-500">
+                                <Loader2 className="animate-spin h-4 w-4" />
+                                Buscando...
+                              </span>
+                            ) : debouncedValue.length <= 2 ? (
+                              "Digite pelo menos 3 caracteres para buscar"
+                            ) : (
+                              empty
+                            )}
+                          </CommandEmpty>
                           <CommandGroup>
-                            {data.map((item) => (
-                              <CommandItem
-                                key={item[fieldValue]}
-                                value={item[fieldValue]}
-                                onSelect={() => {
-                                  field.onChange(
-                                    field.value?.[fieldValue] ===
-                                      item[fieldValue]
-                                      ? null
-                                      : {
-                                          [fieldValue]: item[fieldValue],
-                                          [fieldLabel]: item[fieldLabel],
-                                        }
-                                  );
-                                  setOpen(false);
-                                }}
-                              >
-                                {item[fieldLabel]}
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    field.value?.[fieldValue] ===
-                                      item[fieldValue]
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
+                            {data &&
+                              data.items.map((item) => (
+                                <CommandItem
+                                  key={item.id}
+                                  value={item.cidadeEstado}
+                                  onSelect={() => {
+                                    field.onChange(
+                                      field.value?.id === item.id
+                                        ? null
+                                        : {
+                                            id: item.id,
+                                            descricao: item.cidadeEstado,
+                                          }
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  {item.cidadeEstado}
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      field.value?.id === item.id
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
                           </CommandGroup>
                         </CommandList>
                       </Command>
