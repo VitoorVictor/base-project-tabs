@@ -18,6 +18,7 @@ import {
 import { CustomSwitch } from "@/components/CustomInputs/custom-switch";
 import { CustomInputNumeric } from "@/components/CustomInputs/custom-input-numeric";
 import { CustomCombobox } from "@/components/CustomComboboxs/custom-combobox";
+import { CustomSelect } from "@/components/CustomSelects/custom-select";
 
 interface FormContentProps {
   // onSubmit?: () => void;
@@ -97,23 +98,24 @@ export function FormContent({
           disabled={isDetails}
           format={"#.##.##.####"}
         />
-        <CustomCombobox
-          label="Natureza"
+        <CustomSelect
           name="natureza"
-          loading={isLoading}
-          disabled={isDetails}
-          data={[
+          label="Natureza"
+          placeholder="Selecione o tipo"
+          options={[
             {
-              id: "C",
-              descrição: "C - Crédito",
+              value: "C",
+              label: "C - Crédito",
             },
             {
-              id: "D",
-              descrição: "D - Débito",
+              value: "D",
+              label: "D - Débito",
             },
           ]}
-          fieldLabel="descrição"
-          fieldValue="id"
+          loading={isLoading}
+          disabled={isDetails}
+          className="max-h-8 h-8 m-0 bg-white w-full"
+          containerClassName="flex-1"
         />
         <div className="flex justify-between gap-2">
           <CustomSwitch
