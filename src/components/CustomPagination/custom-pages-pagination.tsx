@@ -21,7 +21,7 @@ export function CustomPagesPagination({
   const currentPage = metaData.currentPage;
   return (
     totalPages > 0 && (
-      <div className="flex justify-center">
+      <div className="flex justify-center pb-2">
         <Pagination>
           <PaginationContent>
             <PaginationItem>
@@ -33,7 +33,7 @@ export function CustomPagesPagination({
                 className={
                   currentPage === 1
                     ? "pointer-events-none opacity-50 h-8"
-                    : "h-8"
+                    : "h-8  cursor-pointer"
                 }
               />
             </PaginationItem>
@@ -84,7 +84,7 @@ export function CustomPagesPagination({
                 className={
                   currentPage === totalPages
                     ? "pointer-events-none opacity-50 h-8"
-                    : "h-8"
+                    : "h-8  cursor-pointer"
                 }
               />
             </PaginationItem>

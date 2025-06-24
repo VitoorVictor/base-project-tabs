@@ -3,14 +3,12 @@ import {
   ColumnConfig,
 } from "@/components/CustomTable/custom-table-anexos";
 import { Button } from "@/components/ui/button";
-import { FormLabel } from "@/components/ui/form";
 import { TabsContent } from "@/components/ui/tabs";
 import { useAnexos } from "@/hooks/tanstack/useAnexo";
 import { useAnexoActions } from "@/hooks/useAnexo";
 import { IAnexo } from "@/interfaces/anexo";
 import { formatDatetime } from "@/utils/formatDatetime";
 import { Eye, Trash } from "lucide-react";
-import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 interface TabAnexosProps {
@@ -104,18 +102,17 @@ export function TabAnexos({ isDetails, isLoading, onDelete }: TabAnexosProps) {
   ];
 
   return (
-    <TabsContent value="anexos">
-      <div className="flex flex-col gap-1 bg-background-alt p-4 border rounded mb-5">
-        <div className="flex gap-2 items-center">
-          <FormLabel className="font-semibold text-base">Anexos</FormLabel>
-        </div>
+    <TabsContent value="anexos" className="p-6 space-y-6 m-0">
+      {/* <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+        <Paperclip className="h-4 w-4" />
+        Anexos
+      </FormLabel> */}
 
-        <CustomTableAnexos
-          data={data || []}
-          columns={columns}
-          minWidth="1000px"
-        />
-      </div>
+      <CustomTableAnexos
+        data={data || []}
+        columns={columns}
+        minWidth="1000px"
+      />
     </TabsContent>
   );
 }

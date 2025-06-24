@@ -29,8 +29,7 @@ import {
 import { useFormContext } from "react-hook-form";
 import { Skeleton } from "../ui/skeleton";
 import { useDebounce } from "@/hooks/useDebounce";
-import { ICidade } from "@/interfaces/cidade";
-import { useCidades } from "@/hooks/tanstack/useCidade";
+import { CIDADE_KEY, useCidades } from "@/hooks/tanstack/useCidade";
 
 interface CustomComboboxCidadesProps {
   name: string;
@@ -71,7 +70,7 @@ export function CustomComboboxCidades({
     { search: debouncedValue },
     {
       enabled: debouncedValue.length > 2,
-      queryKey: ["cidades", debouncedValue],
+      queryKey: [CIDADE_KEY, debouncedValue],
     }
   );
 
@@ -154,7 +153,7 @@ export function CustomComboboxCidades({
                       className="w-[var(--radix-popover-trigger-width)] p-0"
                       align="start"
                     >
-                      <Command>
+                      <Command shouldFilter={false}>
                         <CommandInput
                           placeholder={searchPlaceholder}
                           className="h-8"
@@ -176,7 +175,7 @@ export function CustomComboboxCidades({
                           </CommandEmpty>
                           <CommandGroup>
                             {data &&
-                              data.items.map((item) => (
+                              data.map((item) => (
                                 <CommandItem
                                   key={item.id}
                                   value={item.cidadeEstado}

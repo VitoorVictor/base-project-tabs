@@ -2,6 +2,7 @@ import { CustomCombobox } from "@/components/CustomComboboxs/custom-combobox";
 import { FormLabel } from "@/components/ui/form";
 import { TabsContent } from "@/components/ui/tabs";
 import { useUsuarios } from "@/hooks/tanstack/useUsuario";
+import {  ShoppingCart } from "lucide-react";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -25,11 +26,12 @@ export function TabVendas({ isDetails, isLoading }: TabVendasProps) {
   }, [usuario]);
 
   return (
-    <TabsContent value="vendas">
-      <div className="relative p-4 pt-8 bg-background-overlay rounded-lg border">
+    <TabsContent value="vendas" className="p-6 space-y-6 m-0">
+      <div className="relative p-4 pt-8 bg-background rounded-lg border">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">
-            Dados de Venda
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <ShoppingCart className="h-4 w-4" />
+            Dados da Venda
           </FormLabel>
         </div>
         <div className="flex items-center justify-between gap-2">

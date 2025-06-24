@@ -7,11 +7,11 @@ import {
   keepPreviousData,
 } from "@tanstack/react-query";
 
-const CIDADE_KEY = "cidade";
+export const CIDADE_KEY = "cidade";
 
 export function useCidades(
   filters: IFilterQry,
-  options?: UseQueryOptions<IResponse<ICidade>>
+  options?: UseQueryOptions<ICidade[]>
 ) {
   return useQuery({
     queryKey: [CIDADE_KEY, filters],

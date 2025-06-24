@@ -19,7 +19,7 @@ import { usePessoaTipoContatos } from "@/hooks/tanstack/usePessoaTipoContato";
 import { usePessoaTipoEnderecos } from "@/hooks/tanstack/usePessoaTipoEndereco";
 import { ISearchCep, ISearchCnpj } from "@/interfaces/search";
 import { usePermissionStore } from "@/store/permissionStore";
-import { Plus, X } from "lucide-react";
+import { FileText, Info, Leaf, MapPin, Phone, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
@@ -44,8 +44,11 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
   const { data: tipoContato, isLoading: isLoadingTipoContato } =
     usePessoaTipoContatos({});
 
-  const { data: pessoaGrupos, isLoading: isLoadingGrupoPessoas } =
-    usePessoaGrupos({});
+  const {
+    data: pessoaGrupos,
+    isLoading: isLoadingGrupoPessoas,
+    refetch: refetchPessoasGrupos,
+  } = usePessoaGrupos({});
 
   const { data: pessoaOrigem, isLoading: isLoadingPessoaOrigem } =
     usePessoaOrigens({});
@@ -134,10 +137,13 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
   };
 
   return (
-    <TabsContent value="cadastro" className="grid gap-4">
-      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
+    <TabsContent value="cadastro" className="p-6 space-y-6 m-0">
+      <div className="relative p-4 pt-8 bg-background rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">Natureza</FormLabel>
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <Leaf className="h-4 w-4" />
+            Natureza
+          </FormLabel>
         </div>
         <div className="px-1 flex items-center justify-between gap-2">
           <div className="text-ellipsis w-auto">
@@ -172,9 +178,10 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           <FormMessage>{formState.errors.root?.message}</FormMessage>
         )}
       </div>
-      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
+      <div className="relative p-4 pt-8 bg-background rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <FileText className="h-4 w-4" />
             Informações Cadastrais
           </FormLabel>
         </div>
@@ -272,9 +279,12 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           className="h-8 bg-white"
         />
       </div>
-      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
+      <div className="relative p-4 pt-8 bg-background rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">Endereços</FormLabel>
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <MapPin className="h-4 w-4" />
+            Endereços
+          </FormLabel>
         </div>
         <div className="flex items-center justify-between gap-2">
           <CustomInputCep
@@ -465,9 +475,12 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           ))}
         </div>
       </div>
-      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
+      <div className="relative p-4 pt-8 bg-background rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">Contatos</FormLabel>
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <Phone className="h-4 w-4" />
+            Contatos
+          </FormLabel>
         </div>
         <div className="flex items-center justify-between gap-2">
           <CustomInput
@@ -633,9 +646,10 @@ export function TabCadastro({ isDetails, isLoading }: TabCadastroProps) {
           ))}
         </div>
       </div>
-      <div className="relative p-4 pt-8 bg-background-overlay rounded border space-y-4">
+      <div className="relative p-4 pt-8 bg-background rounded border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <Info className="h-4 w-4" />
             Informações Complementares
           </FormLabel>
         </div>

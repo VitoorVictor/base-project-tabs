@@ -355,10 +355,13 @@ export const formSchema = z
     optanteSimples: z.boolean(),
     produtorRural: z.boolean(),
     issRetido: z.boolean(),
-    vendedor: z.object({
-      id: z.number(),
-      nome: z.string().optional(),
-    }),
+    vendedor: z
+      .object({
+        id: z.number(),
+        nome: z.string().optional(),
+      })
+      .nullable()
+      .optional(),
     natureza: z.string().optional().or(z.literal("")),
   })
   .refine(

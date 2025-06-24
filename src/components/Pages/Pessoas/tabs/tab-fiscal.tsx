@@ -5,6 +5,7 @@ import { CustomSwitch } from "@/components/CustomInputs/custom-switch";
 import { CustomSelect } from "@/components/CustomSelects/custom-select";
 import { FormLabel } from "@/components/ui/form";
 import { TabsContent } from "@/components/ui/tabs";
+import { FileText } from "lucide-react";
 
 interface TabFiscalProps {
   isDetails?: boolean;
@@ -13,10 +14,11 @@ interface TabFiscalProps {
 
 export function TabFiscal({ isDetails, isLoading }: TabFiscalProps) {
   return (
-    <TabsContent value="fiscal">
-      <div className="relative p-4 pt-8 bg-background-overlay rounded-lg border space-y-4">
+    <TabsContent value="fiscal" className="p-6 space-y-6 m-0">
+      <div className="relative p-4 pt-8 bg-background rounded-lg border space-y-4">
         <div className="absolute -top-3">
-          <FormLabel className="font-semibold text-base">
+          <FormLabel className="font-semibold bg-background text-base text-primary px-1">
+            <FileText className="h-4 w-4" />
             Informações Fiscais
           </FormLabel>
         </div>

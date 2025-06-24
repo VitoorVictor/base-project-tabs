@@ -204,7 +204,12 @@ export default function CustomTable<T>({
                 >
                   {columns.map((col) => (
                     <TableCell
-                      onClick={() => (onRowClick ? onRowClick(row) : undefined)}
+                      onMouseUp={(e) => {
+                        const selection = window.getSelection()?.toString();
+                        if (!selection && onRowClick) {
+                          onRowClick(row);
+                        }
+                      }}
                       key={String(col.key)}
                       className={`py-0.5 border-r border-gray-200 truncate overflow-hidden whitespace-nowrap text-label ${
                         col.className ?? ""

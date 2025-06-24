@@ -205,7 +205,7 @@ export function PessoaPage() {
             <span className="hidden md:inline">Nova Pessoa</span>
           </Button>
         </div>
-        <div className="h-full">
+        <div className="flex-1">
           {isLoading && !data && (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -222,6 +222,9 @@ export function PessoaPage() {
               type={type}
               onOrderChange={changeOrder}
               actions={actions}
+              onRowClick={(row) =>
+                actions.onUpdate && actions.onUpdate(row.secureId, row)
+              }
             />
           )}
         </div>
@@ -242,7 +245,7 @@ export function PessoaPage() {
           setShowModal(open);
           setShowDetails(open);
         }}
-        className="w-full sm:max-w-[716px] max-h-[95%] overflow-auto custom-scrollbar bg-background-alt"
+        className="w-full sm:max-w-[716px] max-h-[95%] overflow-auto custom-scrollbar bg-background-overlay"
       >
         <FormContent
           onClose={() => {

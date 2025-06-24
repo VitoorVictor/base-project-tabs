@@ -1,10 +1,8 @@
 import { api } from "./api";
-import { IFilterQry, IResponse } from "@/interfaces/comum";
+import { IFilterQry } from "@/interfaces/comum";
 import { ICidade } from "@/interfaces/cidade";
 
-export async function fetchCidadeAll(
-  filters: IFilterQry
-): Promise<IResponse<ICidade>> {
+export async function fetchCidadeAll(filters: IFilterQry): Promise<ICidade[]> {
   const params: Record<string, string | number> = {};
 
   if (filters.page) params.page = filters.page;

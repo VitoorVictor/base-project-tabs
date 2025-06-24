@@ -1,6 +1,5 @@
 "use client";
 
-import { CustomInput } from "@/components/CustomInputs/custom-input";
 import type React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,14 +14,14 @@ import {
   usePessoa,
   useUpdatePessoa,
 } from "@/hooks/tanstack/usePessoa";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabCadastro } from "./tabs/tab-cadastro";
 import { TabFiscal } from "./tabs/tab-fiscal";
 import { TabVendas } from "./tabs/tab-vendas";
 import { TabAnexos } from "./tabs/tab-anexos";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { useAnexoActions } from "@/hooks/useAnexo";
-import { deleteAnexo } from "@/services/anexo";
+import { FileText, Paperclip, ShoppingCart, User } from "lucide-react";
 
 interface FormContentProps {
   // onSubmit?: () => void;
@@ -197,31 +196,59 @@ export function FormContent({
   return (
     <>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(onSubmitForm)} className="grid gap-4 py-4">
+        <form onSubmit={handleSubmit(onSubmitForm)} className="grid gap-4">
           <Tabs
             defaultValue="cadastro"
             className="max-w-[716px] overflow-hidden"
           >
-            <TabsList
-              className={`grid w-full border mb-5 ${
-                isUpdate ? "grid-cols-4" : "grid-cols-3"
-              }`}
-            >
-              <TabsTrigger value="cadastro">Cadastro</TabsTrigger>
-              <TabsTrigger value="fiscal">Fiscal</TabsTrigger>
-              <TabsTrigger value="vendas">Vendas</TabsTrigger>
-              {isUpdate && <TabsTrigger value="anexos">Anexos</TabsTrigger>}
-            </TabsList>
-            <TabCadastro isDetails={isDetails} isLoading={isLoading} />
-            <TabFiscal isDetails={isDetails} isLoading={isLoading} />
-            <TabVendas isDetails={isDetails} isLoading={isLoading} />
-            {isUpdate && (
-              <TabAnexos
-                isDetails={isDetails}
-                isLoading={isLoading}
-                onDelete={setAnexoId}
-              />
-            )}
+            <div className="relative border-b-2 border-primary rounded-b-none">
+              <TabsList className="flex items-end p-0 bg-transparent space-x-1">
+                <TabsTrigger
+                  value="cadastro"
+                  className="relative bg-background data-[state=active]:border-none border border-slate-300 border-b-0 rounded-b-none px-8 py-4 text-sm font-medium text-gray-700 hover:text-gray-900  data-[state=active]:bg-primary data-[state=active]:text-background data-[state=active]:z-10 shadow-sm hover:shadow-md transition-all duration-200"
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Cadastro
+                </TabsTrigger>
+                <TabsTrigger
+                  value="fiscal"
+                  className="relative bg-background data-[state=active]:border-none border border-slate-300 border-b-0 rounded-b-none px-8 py-4 text-sm font-medium text-gray-700 hover:text-gray-900  data-[state=active]:bg-primary data-[state=active]:text-background data-[state=active]:z-10 shadow-sm hover:shadow-md transition-all duration-200"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Fiscal
+                </TabsTrigger>
+                <TabsTrigger
+                  value="vendas"
+                  className="relative bg-background data-[state=active]:border-none border border-slate-300 border-b-0 rounded-b-none px-8 py-4 text-sm font-medium text-gray-700 hover:text-gray-900  data-[state=active]:bg-primary data-[state=active]:text-background data-[state=active]:z-10 shadow-sm hover:shadow-md transition-all duration-200"
+                >
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Vendas
+                </TabsTrigger>
+                {isUpdate && (
+                  <TabsTrigger
+                    value="anexos"
+                    className="relative bg-background data-[state=active]:border-none border border-slate-300 border-b-0 rounded-b-none px-8 py-4 text-sm font-medium text-gray-700 hover:text-gray-900  data-[state=active]:bg-primary data-[state=active]:text-background data-[state=active]:z-10 shadow-sm hover:shadow-md transition-all duration-200"
+                  >
+                    <Paperclip className="w-4 h-4 mr-2" />
+                    Anexos
+                  </TabsTrigger>
+                )}
+              </TabsList>
+            </div>
+
+            {/* </div> */}
+            <div className="bg-background border-2 border-slate-300 rounded">
+              <TabCadastro isDetails={isDetails} isLoading={isLoading} />
+              <TabFiscal isDetails={isDetails} isLoading={isLoading} />
+              <TabVendas isDetails={isDetails} isLoading={isLoading} />
+              {isUpdate && (
+                <TabAnexos
+                  isDetails={isDetails}
+                  isLoading={isLoading}
+                  onDelete={setAnexoId}
+                />
+              )}
+            </div>
           </Tabs>
           {isDetails ? (
             <div className="flex gap-2 justify-end mt-4">
